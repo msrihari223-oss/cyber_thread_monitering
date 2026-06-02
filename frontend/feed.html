@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feed - Cyber Threat Monitoring</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+        :root {
+            --bg-primary: #080b11;
+            --bg-card: rgba(17, 24, 39, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --brand-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #db2777 100%);
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.35);
+            --shadow-premium: 0 20px 50px rgba(0, 0, 0, 0.6);
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --danger: #ef4444;
+            --success: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-primary);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(219, 39, 119, 0.08) 0px, transparent 50%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 999px;
+            border: 2px solid var(--bg-primary);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .container {
+            max-width: 840px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        header {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 32px;
+            border-radius: 24px;
+            margin-bottom: 28px;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: var(--shadow-premium);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--brand-gradient);
+        }
+
+        header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            background: var(--brand-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .auth-info {
+            background: rgba(56, 189, 248, 0.06);
+            border: 1px solid rgba(56, 189, 248, 0.15);
+            padding: 16px 20px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .auth-info span {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* User Selector */
+        .user-selector {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 24px;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        .user-selector label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .user-selector input {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: var(--text-primary);
+            width: 100%;
+            font-size: 14px;
+            outline: none;
+            transition: var(--transition-smooth);
+        }
+
+        .user-selector input:focus {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: var(--accent);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        /* Create Post Section */
+        .create-post {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 28px;
+            margin-bottom: 32px;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: var(--shadow-premium);
+        }
+
+        .create-post-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .post-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        textarea {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 16px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 110px;
+            transition: var(--transition-smooth);
+            outline: none;
+        }
+
+        textarea:focus {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--accent);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        textarea::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.7;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            outline: none;
+        }
+
+        .btn-primary {
+            background: var(--brand-gradient);
+            color: white;
+            flex: 1;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Feed Posts */
+        .feed {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .post {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 28px;
+            transition: var(--transition-smooth);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: var(--shadow-premium);
+        }
+
+        .post:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .post-author {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .author-name {
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .post-time {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .post-menu {
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 18px;
+            transition: var(--transition-smooth);
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .post-menu:hover {
+            color: var(--accent);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .post-content {
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 24px;
+            color: #e2e8f0;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+
+        .post-stats {
+            display: flex;
+            gap: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 16px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .stat-number {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-primary);
+        }
+
+        .action-btn.liked {
+            background: rgba(219, 39, 119, 0.1);
+            color: #f472b6;
+            border-color: rgba(219, 39, 119, 0.3);
+            text-shadow: 0 0 10px rgba(219, 39, 119, 0.2);
+        }
+
+        /* Comments Section */
+        .comments-section {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            margin-top: 16px;
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        .comments-title {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 700;
+            margin-bottom: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .comment-input {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .comment-input input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 10px 16px;
+            color: var(--text-primary);
+            font-size: 13px;
+            outline: none;
+            transition: var(--transition-smooth);
+        }
+
+        .comment-input input:focus {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: var(--accent);
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .comment-input button {
+            padding: 10px 20px;
+            background: var(--accent);
+            color: #080b11;
+            font-size: 13px;
+            font-weight: 700;
+            border-radius: 12px;
+        }
+
+        .comment-input button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 0 12px var(--accent-glow);
+        }
+
+        .comments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 240px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .comment {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .comment-author {
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 12px;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .comment-text {
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .no-comments {
+            color: var(--text-secondary);
+            font-size: 13px;
+            text-align: center;
+            padding: 16px;
+            opacity: 0.6;
+        }
+
+        .loading {
+            text-align: center;
+            color: var(--text-secondary);
+            padding: 20px;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(56, 189, 248, 0.15);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .empty-feed {
+            text-align: center;
+            padding: 60px 40px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            color: var(--text-secondary);
+            backdrop-filter: blur(16px);
+        }
+
+        .empty-feed-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .error {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 16px;
+            padding: 16px 20px;
+            color: #f87171;
+            margin-bottom: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        .success {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 16px;
+            padding: 16px 20px;
+            color: #34d399;
+            margin-bottom: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 16px;
+            }
+
+            .post-stats {
+                flex-wrap: wrap;
+                gap: 16px;
+            }
+
+            .post-actions {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .action-btn {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+        }
+        /* ── Media Attachment UI ── */
+        .media-attach-bar {
+            display: flex;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        .attach-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: rgba(255,255,255,0.04);
+            border: 1px dashed var(--border-color);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+        .attach-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(56,189,248,0.06);
+        }
+        .attach-btn svg { flex-shrink: 0; }
+
+        .media-preview-wrap {
+            position: relative;
+            display: none;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background: rgba(0,0,0,0.3);
+            max-height: 320px;
+        }
+        .media-preview-wrap.visible { display: block; }
+
+        .media-preview-wrap img,
+        .media-preview-wrap video {
+            width: 100%;
+            max-height: 320px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .media-remove-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.6);
+            border: none;
+            color: #fff;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+            transition: var(--transition-smooth);
+        }
+        .media-remove-btn:hover { background: rgba(239,68,68,0.8); }
+
+        .upload-progress {
+            height: 4px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+            display: none;
+        }
+        .upload-progress.visible { display: block; }
+        .upload-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--brand-gradient);
+            border-radius: 2px;
+            transition: width 0.4s ease;
+        }
+
+        /* ── Post media (rendered in feed) ── */
+        .post-image {
+            width: 100%;
+            max-height: 480px;
+            object-fit: cover;
+            border-radius: 16px;
+            display: block;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+        }
+        .post-video {
+            width: 100%;
+            max-height: 480px;
+            border-radius: 16px;
+            display: block;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            background: #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📱 Community Feed</h1>
+            <p>Share insights and engage with the community</p>
+        </header>
+
+        <div class="auth-info" id="authInfo">
+            <strong>User ID:</strong> <span id="userIdDisplay">-</span> | 
+            <strong>Email:</strong> <span id="userEmailDisplay">-</span>
+        </div>
+
+        <!-- User Selector -->
+        <div class="user-selector">
+            <label for="userId">Your User ID:</label>
+            <input type="number" id="userId" placeholder="Enter your user ID" value="1" min="1">
+        </div>
+
+        <!-- Create Post Section -->
+        <div class="create-post">
+            <div class="create-post-title">✍️ Create New Post</div>
+            <div class="post-input-group">
+                <textarea id="postContent" placeholder="What's on your mind? Share your thoughts..."></textarea>
+
+                <!-- Media preview -->
+                <div class="media-preview-wrap" id="mediaPreviewWrap">
+                    <button class="media-remove-btn" onclick="clearMedia()" title="Remove">✕</button>
+                    <img id="imagePreview" src="" alt="preview" style="display:none">
+                    <video id="videoPreview" controls muted style="display:none"></video>
+                </div>
+
+                <!-- Upload progress -->
+                <div class="upload-progress" id="uploadProgress">
+                    <div class="upload-progress-bar" id="uploadProgressBar"></div>
+                </div>
+
+                <!-- Hidden file inputs -->
+                <input type="file" id="imageInput" accept="image/jpeg,image/png,image/gif,image/webp" style="display:none" onchange="handleImageSelect(event)">
+                <input type="file" id="videoInput" accept="video/mp4,video/webm,video/quicktime,video/ogg" style="display:none" onchange="handleVideoSelect(event)">
+
+                <div class="media-attach-bar">
+                    <button class="attach-btn" onclick="document.getElementById('imageInput').click()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
+                        Photo
+                    </button>
+                    <button class="attach-btn" onclick="document.getElementById('videoInput').click()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23,7 16,12 23,17"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+                        Video
+                    </button>
+                </div>
+
+                <div class="post-actions">
+                    <button class="btn-primary" id="postButton">Post</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Messages -->
+        <div id="messageContainer"></div>
+
+        <!-- Feed -->
+        <div class="feed" id="feed">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Loading posts...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ── Media state ──
+        let pendingImageUrl = null;
+        let pendingVideoUrl = null;
+
+        // ── State ──
+        const state = {
+            userId: parseInt(localStorage.getItem('userId') || '1'),
+            posts: [],
+            expandedComments: new Set()
+        };
+
+        // ── DOM Elements ──
+        const elements = {
+            userIdInput:      document.getElementById('userId'),
+            userIdDisplay:    document.getElementById('userIdDisplay'),
+            userEmailDisplay: document.getElementById('userEmailDisplay'),
+            postContent:      document.getElementById('postContent'),
+            postButton:       document.getElementById('postButton'),
+            feed:             document.getElementById('feed'),
+            messageContainer: document.getElementById('messageContainer'),
+            mediaPreviewWrap: document.getElementById('mediaPreviewWrap'),
+            imagePreview:     document.getElementById('imagePreview'),
+            videoPreview:     document.getElementById('videoPreview'),
+            uploadProgress:   document.getElementById('uploadProgress'),
+            uploadProgressBar:document.getElementById('uploadProgressBar'),
+        };
+
+        // ── Init ──
+        function init() {
+            state.userId = parseInt(elements.userIdInput.value);
+            localStorage.setItem('userId', state.userId);
+            elements.userIdDisplay.textContent = state.userId;
+            elements.postButton.addEventListener('click', createPost);
+            elements.userIdInput.addEventListener('change', () => {
+                state.userId = parseInt(elements.userIdInput.value);
+                localStorage.setItem('userId', state.userId);
+                loadFeed();
+            });
+            loadFeed();
+        }
+
+        // ── Load Feed ──
+        async function loadFeed() {
+            try {
+                const response = await fetch(`/api/posts/feed?user_id=${state.userId}`);
+                if (!response.ok) throw new Error('Failed to load feed');
+                const data = await response.json();
+                state.posts = data.posts || [];
+                renderFeed();
+            } catch (error) {
+                showError('Failed to load feed: ' + error.message);
+                elements.feed.innerHTML = `
+                    <div class="empty-feed">
+                        <div class="empty-feed-icon">⚠️</div>
+                        <p>${error.message}</p>
+                    </div>`;
+            }
+        }
+
+        // ── Media: handle image selection & upload ──
+        async function handleImageSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            clearMedia();
+
+            // Show local preview immediately
+            elements.imagePreview.src = URL.createObjectURL(file);
+            elements.imagePreview.style.display = 'block';
+            elements.videoPreview.style.display = 'none';
+            elements.mediaPreviewWrap.classList.add('visible');
+
+            await uploadMedia(file, 'image');
+            event.target.value = ''; // reset input
+        }
+
+        // ── Media: handle video selection & upload ──
+        async function handleVideoSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            clearMedia();
+
+            // Show local preview immediately
+            elements.videoPreview.src = URL.createObjectURL(file);
+            elements.videoPreview.style.display = 'block';
+            elements.imagePreview.style.display = 'none';
+            elements.mediaPreviewWrap.classList.add('visible');
+
+            await uploadMedia(file, 'video');
+            event.target.value = ''; // reset input
+        }
+
+        // ── Shared upload logic ──
+        async function uploadMedia(file, type) {
+            const endpoint = type === 'image'
+                ? '/api/posts/upload-image'
+                : '/api/posts/upload-video';
+
+            elements.uploadProgress.classList.add('visible');
+            elements.uploadProgressBar.style.width = '10%';
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                // Animate progress bar while uploading
+                let prog = 10;
+                const progTimer = setInterval(() => {
+                    prog = Math.min(prog + 8, 85);
+                    elements.uploadProgressBar.style.width = prog + '%';
+                }, 300);
+
+                const resp = await fetch(endpoint, { method: 'POST', body: formData });
+                clearInterval(progTimer);
+
+                if (!resp.ok) {
+                    const err = await resp.json();
+                    throw new Error(err.detail || 'Upload failed');
+                }
+                const data = await resp.json();
+
+                elements.uploadProgressBar.style.width = '100%';
+                setTimeout(() => elements.uploadProgress.classList.remove('visible'), 600);
+
+                if (type === 'image') pendingImageUrl = data.image_url;
+                else                  pendingVideoUrl = data.video_url;
+
+            } catch (err) {
+                elements.uploadProgress.classList.remove('visible');
+                showError('Upload failed: ' + err.message);
+                clearMedia();
+            }
+        }
+
+        // ── Clear pending media ──
+        function clearMedia() {
+            pendingImageUrl = null;
+            pendingVideoUrl = null;
+            elements.imagePreview.src = '';
+            elements.imagePreview.style.display = 'none';
+            elements.videoPreview.src = '';
+            elements.videoPreview.style.display = 'none';
+            elements.mediaPreviewWrap.classList.remove('visible');
+            elements.uploadProgress.classList.remove('visible');
+            elements.uploadProgressBar.style.width = '0%';
+        }
+
+        // ── Create Post ──
+        async function createPost() {
+            const content = elements.postContent.value.trim();
+            if (!content && !pendingImageUrl && !pendingVideoUrl) {
+                showError('Write something or attach a photo/video before posting');
+                return;
+            }
+
+            elements.postButton.disabled = true;
+            elements.postButton.textContent = 'Posting...';
+
+            try {
+                const body = {
+                    user_id: state.userId,
+                    content: content || '',
+                };
+                if (pendingImageUrl) body.image_url = pendingImageUrl;
+                if (pendingVideoUrl) body.video_url = pendingVideoUrl;
+
+                const response = await fetch('/api/posts/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Failed to create post');
+                }
+
+                const result = await response.json();
+
+                // Warning feedback
+                if (result.is_blocked) {
+                    showError('⛔ Your account has been blocked due to repeated violations.');
+                } else if (result.warning_issued) {
+                    showError(`⚠️ Warning ${result.warnings_count}/3: Your post contained policy-violating content.`);
+                } else {
+                    showSuccess('Post shared successfully! 🎉');
+                }
+
+                elements.postContent.value = '';
+                clearMedia();
+                loadFeed();
+            } catch (error) {
+                showError('Failed to create post: ' + error.message);
+            } finally {
+                elements.postButton.disabled = false;
+                elements.postButton.textContent = 'Post';
+            }
+        }
+
+        // ── Render Feed ──
+        function renderFeed() {
+            if (!state.posts || state.posts.length === 0) {
+                elements.feed.innerHTML = `
+                    <div class="empty-feed">
+                        <div class="empty-feed-icon">📭</div>
+                        <p>No posts yet. Be the first to share!</p>
+                    </div>`;
+                return;
+            }
+
+            elements.feed.innerHTML = state.posts.map(post => {
+                // Build inline media HTML
+                let mediaHtml = '';
+                if (post.image_url) {
+                    mediaHtml = `<img class="post-image" src="${post.image_url}" alt="post image" loading="lazy">`;
+                } else if (post.video_url) {
+                    mediaHtml = `<video class="post-video" src="${post.video_url}" controls preload="metadata" playsinline></video>`;
+                }
+
+                return `
+                <div class="post" data-post-id="${post.id}">
+                    <div class="post-header">
+                        <div class="post-author">
+                            <div class="author-name">👤 ${post.user_email || 'User ' + post.user_id}</div>
+                            <div class="post-time">${formatDate(post.created_at)}</div>
+                        </div>
+                        ${post.user_id === state.userId ? `
+                            <div class="post-menu" onclick="deletePost(${post.id})">⋮</div>
+                        ` : ''}
+                    </div>
+
+                    ${post.content ? `<div class="post-content">${escapeHtml(post.content)}</div>` : ''}
+                    ${mediaHtml}
+
+                    <div class="post-stats">
+                        <div class="stat">
+                            <span>❤️</span>
+                            <span class="stat-number">${post.likes_count}</span>
+                            <span>Likes</span>
+                        </div>
+                        <div class="stat">
+                            <span>💬</span>
+                            <span class="stat-number">${post.comments_count}</span>
+                            <span>Comments</span>
+                        </div>
+                        <div class="stat">
+                            <span>📤</span>
+                            <span class="stat-number">${post.shares_count}</span>
+                            <span>Shares</span>
+                        </div>
+                    </div>
+
+                    <div class="post-actions">
+                        <button class="action-btn ${post.is_liked ? 'liked' : ''}" onclick="likePost(${post.id})">
+                            <span>${post.is_liked ? '❤️' : '🤍'}</span>
+                            <span>Like</span>
+                        </button>
+                        <button class="action-btn" onclick="toggleComments(${post.id})">
+                            <span>💬</span>
+                            <span>Comment</span>
+                        </button>
+                        <button class="action-btn" onclick="sharePost(${post.id})">
+                            <span>📤</span>
+                            <span>Share</span>
+                        </button>
+                    </div>
+
+                    <div class="comments-section" id="comments-${post.id}" style="display: none;">
+                        <div class="comments-title">Comments</div>
+                        <div class="comment-input">
+                            <input type="text" placeholder="Add a comment..." id="comment-input-${post.id}">
+                            <button onclick="postComment(${post.id})">Reply</button>
+                        </div>
+                        <div class="comments-list" id="comments-list-${post.id}">
+                            <div class="loading"><div class="spinner"></div></div>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        // Like Post
+        async function likePost(postId) {
+            try {
+                const response = await fetch(`/api/posts/${postId}/like`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        post_id: postId,
+                        user_id: state.userId
+                    })
+                });
+
+                if (!response.ok) throw new Error('Failed to like post');
+                loadFeed();
+            } catch (error) {
+                showError('Failed to like post: ' + error.message);
+            }
+        }
+
+        // Comment on Post
+        async function postComment(postId) {
+            const inputId = `comment-input-${postId}`;
+            const input = document.getElementById(inputId);
+            const content = input.value.trim();
+
+            if (!content) {
+                showError('Comment cannot be empty');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/posts/${postId}/comment`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        post_id: postId,
+                        user_id: state.userId,
+                        content: content
+                    })
+                });
+
+                if (!response.ok) throw new Error('Failed to post comment');
+
+                input.value = '';
+                loadComments(postId);
+            } catch (error) {
+                showError('Failed to post comment: ' + error.message);
+            }
+        }
+
+        // Toggle Comments Section
+        function toggleComments(postId) {
+            const section = document.getElementById(`comments-${postId}`);
+            if (section.style.display === 'none') {
+                section.style.display = 'block';
+                if (!state.expandedComments.has(postId)) {
+                    loadComments(postId);
+                    state.expandedComments.add(postId);
+                }
+            } else {
+                section.style.display = 'none';
+            }
+        }
+
+        // Load Comments
+        async function loadComments(postId) {
+            try {
+                const response = await fetch(`/api/posts/${postId}?user_id=${state.userId}`);
+                if (!response.ok) throw new Error('Failed to load comments');
+
+                const data = await response.json();
+                const commentsList = document.getElementById(`comments-list-${postId}`);
+
+                if (!data.comments || data.comments.length === 0) {
+                    commentsList.innerHTML = '<div class="no-comments">No comments yet</div>';
+                    return;
+                }
+
+                commentsList.innerHTML = data.comments.map(comment => `
+                    <div class="comment">
+                        <div class="comment-author">👤 ${comment.user_email || 'User ' + comment.user_id}</div>
+                        <div class="comment-text">${escapeHtml(comment.content)}</div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                showError('Failed to load comments');
+            }
+        }
+
+        // Share Post
+        async function sharePost(postId) {
+            try {
+                const response = await fetch(`/api/posts/${postId}/share`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        post_id: postId,
+                        user_id: state.userId
+                    })
+                });
+
+                if (!response.ok) throw new Error('Failed to share post');
+                showSuccess('Post shared successfully!');
+                loadFeed();
+            } catch (error) {
+                showError('Failed to share post: ' + error.message);
+            }
+        }
+
+        // Delete Post
+        async function deletePost(postId) {
+            if (!confirm('Are you sure you want to delete this post?')) return;
+
+            try {
+                const response = await fetch(`/api/posts/${postId}?user_id=${state.userId}`, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (!response.ok) throw new Error('Failed to delete post');
+                showSuccess('Post deleted successfully!');
+                loadFeed();
+            } catch (error) {
+                showError('Failed to delete post: ' + error.message);
+            }
+        }
+
+        // Helpers
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+
+            if (diffMins < 1) return 'just now';
+            if (diffMins < 60) return `${diffMins}m ago`;
+            
+            const diffHours = Math.floor(diffMins / 60);
+            if (diffHours < 24) return `${diffHours}h ago`;
+            
+            const diffDays = Math.floor(diffHours / 24);
+            if (diffDays < 7) return `${diffDays}d ago`;
+            
+            return date.toLocaleDateString();
+        }
+
+        function showError(message) {
+            const div = document.createElement('div');
+            div.className = 'error';
+            div.textContent = '⚠️ ' + message;
+            elements.messageContainer.innerHTML = '';
+            elements.messageContainer.appendChild(div);
+            setTimeout(() => div.remove(), 5000);
+        }
+
+        function showSuccess(message) {
+            const div = document.createElement('div');
+            div.className = 'success';
+            div.textContent = '✓ ' + message;
+            elements.messageContainer.innerHTML = '';
+            elements.messageContainer.appendChild(div);
+            setTimeout(() => div.remove(), 5000);
+        }
+
+        // Start
+        init();
+    </script>
+</body>
+</html>

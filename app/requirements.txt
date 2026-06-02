@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+sqlalchemy
+python-jose
+passlib[bcrypt]
+transformers
+torch
+reportlab
+python-multipart
+python-dotenv
+websockets
+aioredis
+redis
+python-json-logger

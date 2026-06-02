@@ -1,0 +1,525 @@
+============================================================
+TIMESTAMP: 2026-06-02 22:06:34
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: Your password reset OTP
+------------------------------------------------------------
+Your OTP for password reset is: 701577
+This code will expire in a few minutes. If you did not request this, ignore this email.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 22:07:52
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: Your password reset OTP
+------------------------------------------------------------
+Your OTP for password reset is: 187597
+This code will expire in a few minutes. If you did not request this, ignore this email.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 22:07:56
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: Your password reset OTP
+------------------------------------------------------------
+Your OTP for password reset is: 279436
+This code will expire in a few minutes. If you did not request this, ignore this email.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 22:08:36
+FROM: vu.cse.241fa04677@gmail.com
+TO: merikinapallisrihari@gmail.com
+SUBJECT: Your password reset OTP
+------------------------------------------------------------
+Your OTP for password reset is: 991321
+This code will expire in a few minutes. If you did not request this, ignore this email.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 22:16:21
+SMS SENT TO: +916304677919 (6304677919)
+MESSAGE: Secure OTP is: 941423
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 22:16:39
+SMS SENT TO: 6304677919 (6304677919)
+MESSAGE: Secure OTP is: 555888
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 22:17:14
+SMS SENT TO: +916304677919 (6304677919)
+MESSAGE: Secure OTP is: 958242
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 22:17:16
+SMS SENT TO: +916304677919 (6304677919)
+MESSAGE: Secure OTP is: 994410
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 22:20:52
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: OTP Verification
+------------------------------------------------------------
+Your OTP is: 833514
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 22:21:28
+FROM: vu.cse.241fa04677@gmail.com
+TO: merikinapallisrihari@gmail.com
+SUBJECT: OTP Verification
+------------------------------------------------------------
+Your OTP is: 232594
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 22:21:34
+FROM: vu.cse.241fa04677@gmail.com
+TO: merikinapallisrihari@gmail.com
+SUBJECT: OTP Verification
+------------------------------------------------------------
+Your OTP is: 111737
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 22:23:00
+FROM: vu.cse.241fa04677@gmail.com
+TO: merikinapallisrihari@gmail.com
+SUBJECT: OTP Verification
+------------------------------------------------------------
+Your OTP is: 496230
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 22:24:00
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: OTP Verification
+------------------------------------------------------------
+Your OTP is: 121288
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 22:25:03
+FROM: vu.cse.241fa04677@gmail.com
+TO: merikinapallisrihari@gmail.com
+SUBJECT: Community Guidelines Warning (1/3)
+------------------------------------------------------------
+Dear User,
+
+This is warning 1 of 3 for your account merikinapallisrihari@gmail.com.
+We detected highly inappropriate or toxic language in your comment:
+"dirty car"
+
+Please review our community guidelines. Posting abusive content, cyber threats, or offensive language is strictly prohibited.
+Please note that receiving 3 warnings will result in the permanent suspension of your account.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 22:25:28
+FROM: vu.cse.241fa04677@gmail.com
+TO: merikinapallisrihari@gmail.com
+SUBJECT: Community Guidelines Warning (2/3)
+------------------------------------------------------------
+Dear User,
+
+This is warning 2 of 3 for your account merikinapallisrihari@gmail.com.
+We detected highly inappropriate or toxic language in your comment:
+"dirty car"
+
+Please review our community guidelines. Posting abusive content, cyber threats, or offensive language is strictly prohibited.
+Please note that receiving 3 warnings will result in the permanent suspension of your account.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 22:25:41
+FROM: vu.cse.241fa04677@gmail.com
+TO: merikinapallisrihari@gmail.com
+SUBJECT: Account Suspended: CyberWatch Community Guidelines Violation
+------------------------------------------------------------
+Dear User,
+
+Your CyberWatch account associated with merikinapallisrihari@gmail.com has been permanently blocked.
+This action was taken due to repeated violations of our community guidelines (abusive language, spam, or cyber threats).
+
+Recent violation details:
+- Content: "dirty car"
+- Warning status: 3 of 3 (Permanent Block)
+
+If you believe this was an error, please contact support.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 22:25:46
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: Spam Report: merikinapallisrihari@gmail.com
+------------------------------------------------------------
+A user has been flagged for spam or abusive content.
+
+User Email: merikinapallisrihari@gmail.com
+Threat Level: HIGH
+Toxicity Score: 0.8285
+
+Comment:
+dirty car
+
+This user account has been blocked from signing in and should be reviewed.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 22:29:02
+FROM: vu.cse.241fa04677@gmail.com
+TO: testuser@example.com
+SUBJECT: Community Guidelines Warning (1/3)
+------------------------------------------------------------
+Dear User,
+
+This is warning 1 of 3 for your account testuser@example.com.
+We detected highly inappropriate or toxic language in your comment:
+"This is a bad comment"
+
+Please review our community guidelines. Posting abusive content, cyber threats, or offensive language is strictly prohibited.
+Please note that receiving 3 warnings will result in the permanent suspension of your account.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 22:29:08
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: Spam Report: testuser@example.com
+------------------------------------------------------------
+A user has been flagged for spam or abusive content.
+
+User Email: testuser@example.com
+Threat Level: HIGH
+Toxicity Score: 0.9850
+
+Comment:
+This is a bad comment
+
+This user account has been blocked from signing in and should be reviewed.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 22:31:12
+FROM: vu.cse.241fa04677@gmail.com
+TO: merikinapallisrihari@gmail.com
+SUBJECT: Community Guidelines Warning (1/3)
+------------------------------------------------------------
+Dear User,
+
+This is warning 1 of 3 for your account merikinapallisrihari@gmail.com.
+We detected highly inappropriate or toxic language in your comment:
+"dirty car"
+
+Please review our community guidelines. Posting abusive content, cyber threats, or offensive language is strictly prohibited.
+Please note that receiving 3 warnings will result in the permanent suspension of your account.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 22:31:17
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: Spam Report: merikinapallisrihari@gmail.com
+------------------------------------------------------------
+A user has been flagged for spam or abusive content.
+
+User Email: merikinapallisrihari@gmail.com
+Threat Level: HIGH
+Toxicity Score: 0.8285
+
+Comment:
+dirty car
+
+This user account has been blocked from signing in and should be reviewed.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 22:31:51
+FROM: vu.cse.241fa04677@gmail.com
+TO: merikinapallisrihari@gmail.com
+SUBJECT: Community Guidelines Warning (2/3)
+------------------------------------------------------------
+Dear User,
+
+This is warning 2 of 3 for your account merikinapallisrihari@gmail.com.
+We detected highly inappropriate or toxic language in your comment:
+"dirty car"
+
+Please review our community guidelines. Posting abusive content, cyber threats, or offensive language is strictly prohibited.
+Please note that receiving 3 warnings will result in the permanent suspension of your account.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 22:31:57
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: Spam Report: merikinapallisrihari@gmail.com
+------------------------------------------------------------
+A user has been flagged for spam or abusive content.
+
+User Email: merikinapallisrihari@gmail.com
+Threat Level: HIGH
+Toxicity Score: 0.8285
+
+Comment:
+dirty car
+
+This user account has been blocked from signing in and should be reviewed.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 22:32:16
+FROM: vu.cse.241fa04677@gmail.com
+TO: merikinapallisrihari@gmail.com
+SUBJECT: Account Suspended: CyberWatch Community Guidelines Violation
+------------------------------------------------------------
+Dear User,
+
+Your CyberWatch account associated with merikinapallisrihari@gmail.com has been permanently blocked.
+This action was taken due to repeated violations of our community guidelines (abusive language, spam, or cyber threats).
+
+Recent violation details:
+- Content: "dirty car"
+- Warning status: 3 of 3 (Permanent Block)
+
+If you believe this was an error, please contact support.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 22:32:22
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: Spam Report: merikinapallisrihari@gmail.com
+------------------------------------------------------------
+A user has been flagged for spam or abusive content.
+
+User Email: merikinapallisrihari@gmail.com
+Threat Level: HIGH
+Toxicity Score: 0.8285
+
+Comment:
+dirty car
+
+This user account has been blocked from signing in and should be reviewed.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 22:35:25
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: OTP Verification
+------------------------------------------------------------
+Your OTP is: 627393
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 22:38:35
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: Community Guidelines Warning (2/3)
+------------------------------------------------------------
+Dear User,
+
+This is warning 2 of 3 for your account vu.cse.241fa04677@gmail.com.
+We detected highly inappropriate or toxic language in your comment:
+"hate this"
+
+Please review our community guidelines. Posting abusive content, cyber threats, or offensive language is strictly prohibited.
+Please note that receiving 3 warnings will result in the permanent suspension of your account.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 22:38:39
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: Spam Report: vu.cse.241fa04677@gmail.com
+------------------------------------------------------------
+A user has been flagged for spam or abusive content.
+
+User Email: vu.cse.241fa04677@gmail.com
+Threat Level: CRITICAL
+Toxicity Score: 0.9500
+
+Comment:
+hate this
+
+This user account has been blocked from signing in and should be reviewed.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 22:40:26
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: Account Suspended: CyberWatch Community Guidelines Violation
+------------------------------------------------------------
+Dear User,
+
+Your CyberWatch account associated with vu.cse.241fa04677@gmail.com has been permanently blocked.
+This action was taken due to repeated violations of our community guidelines (abusive language, spam, or cyber threats).
+
+Recent violation details:
+- Content: "hate this"
+- Warning status: 3 of 3 (Permanent Block)
+
+If you believe this was an error, please contact support.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 22:40:30
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: Spam Report: vu.cse.241fa04677@gmail.com
+------------------------------------------------------------
+A user has been flagged for spam or abusive content.
+
+User Email: vu.cse.241fa04677@gmail.com
+Threat Level: CRITICAL
+Toxicity Score: 0.9500
+
+Comment:
+hate this
+
+This user account has been blocked from signing in and should be reviewed.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 23:19:25
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: OTP Verification
+------------------------------------------------------------
+Your OTP is: 559404
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 23:19:40
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: OTP Verification
+------------------------------------------------------------
+Your OTP is: 992280
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 23:20:43
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: OTP Verification
+------------------------------------------------------------
+Your OTP is: 599125
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 23:21:52
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: Community Guidelines Warning (1/3)
+------------------------------------------------------------
+Dear User,
+
+This is warning 1 of 3 for your account vu.cse.241fa04677@gmail.com.
+We detected highly inappropriate or toxic language in your comment:
+"dirty car"
+
+Please review our community guidelines. Posting abusive content, cyber threats, or offensive language is strictly prohibited.
+Please note that receiving 3 warnings will result in the permanent suspension of your account.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 23:21:56
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: Spam Report: vu.cse.241fa04677@gmail.com
+------------------------------------------------------------
+A user has been flagged for spam or abusive content.
+
+User Email: vu.cse.241fa04677@gmail.com
+Threat Level: HIGH
+Toxicity Score: 0.8285
+
+Comment:
+dirty car
+
+This user account has been blocked from signing in and should be reviewed.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 23:22:10
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: Community Guidelines Warning (2/3)
+------------------------------------------------------------
+Dear User,
+
+This is warning 2 of 3 for your account vu.cse.241fa04677@gmail.com.
+We detected highly inappropriate or toxic language in your comment:
+"dirty car"
+
+Please review our community guidelines. Posting abusive content, cyber threats, or offensive language is strictly prohibited.
+Please note that receiving 3 warnings will result in the permanent suspension of your account.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 23:22:14
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: Spam Report: vu.cse.241fa04677@gmail.com
+------------------------------------------------------------
+A user has been flagged for spam or abusive content.
+
+User Email: vu.cse.241fa04677@gmail.com
+Threat Level: HIGH
+Toxicity Score: 0.8285
+
+Comment:
+dirty car
+
+This user account has been blocked from signing in and should be reviewed.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 23:22:22
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: Account Suspended: CyberWatch Community Guidelines Violation
+------------------------------------------------------------
+Dear User,
+
+Your CyberWatch account associated with vu.cse.241fa04677@gmail.com has been permanently blocked.
+This action was taken due to repeated violations of our community guidelines (abusive language, spam, or cyber threats).
+
+Recent violation details:
+- Content: "dirty car"
+- Warning status: 3 of 3 (Permanent Block)
+
+If you believe this was an error, please contact support.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-02 23:22:26
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: Spam Report: vu.cse.241fa04677@gmail.com
+------------------------------------------------------------
+A user has been flagged for spam or abusive content.
+
+User Email: vu.cse.241fa04677@gmail.com
+Threat Level: HIGH
+Toxicity Score: 0.8285
+
+Comment:
+dirty car
+
+This user account has been blocked from signing in and should be reviewed.
+============================================================
+

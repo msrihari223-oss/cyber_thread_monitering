@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - Cyber Monitoring</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+        :root {
+            --bg-primary: #080b11;
+            --bg-card: rgba(17, 24, 39, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --brand-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #db2777 100%);
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.35);
+            --shadow-premium: 0 20px 50px rgba(0, 0, 0, 0.6);
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --danger: #ef4444;
+            --success: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-primary);
+            background-image:
+                radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(219, 39, 119, 0.08) 0px, transparent 50%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 999px;
+            border: 2px solid var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .navbar {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar h1 {
+            font-size: 20px;
+            font-weight: 800;
+            background: var(--brand-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .navbar nav {
+            display: flex;
+            gap: 24px;
+        }
+
+        .navbar a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: var(--transition-smooth);
+        }
+
+        .navbar a:hover {
+            color: var(--accent);
+            text-shadow: 0 0 8px var(--accent-glow);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        .analytics-header {
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .analytics-header h2 {
+            font-size: 28px;
+            font-weight: 800;
+            background: var(--brand-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .analytics-header p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: var(--shadow-premium);
+            transition: var(--transition-smooth);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--brand-gradient);
+            opacity: 0.8;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+        }
+
+        .stat-card.total::before {
+            background: linear-gradient(90deg, #4f46e5, #7c3aed);
+        }
+
+        .stat-card.blocked::before {
+            background: linear-gradient(90deg, #f43f5e, #ef4444);
+        }
+
+        .stat-card.blacklisted::before {
+            background: linear-gradient(90deg, #f59e0b, #ed8936);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .stat-value {
+            font-size: 44px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+        }
+
+        .stat-card.total .stat-value {
+            color: var(--accent);
+            text-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .stat-card.blocked .stat-value {
+            color: var(--danger);
+            text-shadow: 0 0 15px rgba(239, 68, 68, 0.35);
+        }
+
+        .stat-card.blacklisted .stat-value {
+            color: #ed8936;
+            text-shadow: 0 0 15px rgba(237, 137, 54, 0.35);
+        }
+
+        .stat-description {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .data-table,
+        .blocked-list-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            box-shadow: var(--shadow-premium);
+            overflow: hidden;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            margin-bottom: 32px;
+        }
+
+        .blocked-list {
+            padding: 24px;
+        }
+
+        .blocked-item {
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            font-size: 14px;
+            color: var(--text-primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition-smooth);
+        }
+
+        .blocked-item:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .unblock-btn {
+            background: var(--success);
+            color: #080b11;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .unblock-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+        }
+
+        .blocked-empty {
+            color: var(--text-secondary);
+            font-size: 14px;
+            text-align: center;
+            padding: 20px;
+            opacity: 0.6;
+        }
+
+        .table-header {
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 24px;
+        }
+
+        .table-header h3 {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.01);
+            padding: 16px 24px;
+            text-align: left;
+            font-weight: 700;
+            color: var(--text-secondary);
+            font-size: 13px;
+            border-bottom: 1px solid var(--border-color);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-active {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .status-blocked {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .refresh-btn {
+            background: var(--brand-gradient);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 14px;
+            transition: var(--transition-smooth);
+            float: right;
+            margin-top: -54px;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <h1>📊 Analytics Dashboard</h1>
+        <nav>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/analytics">Analytics</a>
+            <a href="/" onclick="localStorage.clear(); return true;">Logout</a>
+        </nav>
+    </div>
+
+    <div class="container">
+        <div class="analytics-header">
+            <h2>System Analytics</h2>
+            <p>Real-time monitoring and statistics of threat detection</p>
+        </div>
+
+        <button class="refresh-btn" onclick="loadAnalytics()">🔄 Refresh</button>
+
+        <div class="stats-grid">
+            <div class="stat-card total">
+                <div class="stat-label">Total Users</div>
+                <div class="stat-value" id="users">0</div>
+                <div class="stat-description">Active users in the system</div>
+            </div>
+
+            <div class="stat-card blocked">
+                <div class="stat-label">Blocked Users</div>
+                <div class="stat-value" id="blocked">0</div>
+                <div class="stat-description">Users blocked due to threats</div>
+            </div>
+
+            <div class="stat-card blacklisted">
+                <div class="stat-label">Blacklisted Users</div>
+                <div class="stat-value" id="blacklisted">0</div>
+                <div class="stat-description">Critical threat users</div>
+            </div>
+        </div>
+
+        <div class="data-table">
+            <div class="table-header">
+                <h3>Detailed Statistics</h3>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Value</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Active Users</td>
+                        <td id="activeUsers">-</td>
+                        <td><span class="status-badge status-active">Active</span></td>
+                    </tr>
+                    <tr>
+                        <td>Flagged for Review</td>
+                        <td id="flaggedUsers">-</td>
+                        <td><span class="status-badge status-blocked">Alert</span></td>
+                    </tr>
+                    <tr>
+                        <td>System Status</td>
+                        <td>Online</td>
+                        <td><span class="status-badge status-active">Operational</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="blocked-list-card">
+            <div class="table-header">
+                <h3>Blocked Accounts</h3>
+            </div>
+            <div class="blocked-list" id="blockedList">
+                <p class="blocked-empty">No blocked accounts yet.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function loadAnalytics() {
+            const usersDiv = document.getElementById("users");
+            const blockedDiv = document.getElementById("blocked");
+            const blacklistedDiv = document.getElementById("blacklisted");
+            const activeUsersDiv = document.getElementById("activeUsers");
+            const flaggedUsersDiv = document.getElementById("flaggedUsers");
+            const blockedList = document.getElementById("blockedList");
+
+            try {
+                let response = await fetch("/admin/stats");
+                if (!response.ok) {
+                    throw new Error("Failed to load analytics");
+                }
+
+                let data = await response.json();
+
+                usersDiv.textContent = data.total_users;
+                blockedDiv.textContent = data.blocked_users;
+                blacklistedDiv.textContent = data.blacklisted_users;
+                activeUsersDiv.textContent = data.total_users - data.blocked_users;
+                flaggedUsersDiv.textContent = data.blacklisted_users;
+
+                blockedList.innerHTML = "";
+                if (data.blocked_emails && data.blocked_emails.length > 0) {
+                    data.blocked_emails.forEach(email => {
+                        const item = document.createElement("div");
+                        item.className = "blocked-item";
+                        const label = document.createElement("span");
+                        label.textContent = email;
+                        const button = document.createElement("button");
+                        button.className = "unblock-btn";
+                        button.textContent = "Unblock";
+                        button.onclick = async () => {
+                            const confirmed = window.confirm(`Unblock ${email}?`);
+                            if (!confirmed) return;
+                            const resp = await fetch("/admin/unblock", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ email })
+                            });
+                            if (!resp.ok) {
+                                const err = await resp.json();
+                                alert(err.detail || "Unable to unblock user");
+                                return;
+                            }
+                            alert(`User ${email} has been unblocked.`);
+                            loadAnalytics();
+                        };
+                        item.appendChild(label);
+                        item.appendChild(button);
+                        blockedList.appendChild(item);
+                    });
+                } else {
+                    blockedList.innerHTML = '<p class="blocked-empty">No blocked accounts yet.</p>';
+                }
+            } catch (error) {
+                usersDiv.textContent = "Error";
+                blockedDiv.textContent = "Error";
+                blacklistedDiv.textContent = "Error";
+                blockedList.innerHTML = '<p class="blocked-empty">Unable to load blocked accounts.</p>';
+                console.error("Analytics error:", error);
+            }
+        }
+
+        loadAnalytics();
+
+        setInterval(loadAnalytics, 30000);
+    </script>
+</body>
+
+</html>
