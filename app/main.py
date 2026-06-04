@@ -254,7 +254,7 @@ def forgot_password_get(email: str):
         print("="*60 + "\n")
 
         # Send OTP via email as requested
-        from email_service import send_otp_email
+        from .email_service import send_otp_email
         send_otp_email(user.email, otp_code)
 
         return {"message": "OTP sent to your email successfully!"}

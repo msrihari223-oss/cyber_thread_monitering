@@ -28,8 +28,18 @@ def send_email(receiver: str, subject: str, body: str):
     from email.mime.text import MIMEText
     import datetime
     
-    sender_email = "vu.cse.241fa04677@gmail.com"
-    sender_password = "bhrs ligq hclp nobj"
+    try:
+        sender_email, sender_password = _get_smtp_credentials()
+    except Exception as cred_err:
+        print(f"[Email Service] Failed to get SMTP credentials: {repr(cred_err)}")
+        return False
+
+    report_receiver = os.environ.get("REPORT_RECEIVER_EMAIL", sender_email)
+    
+    lower_receiver = receiver.lower()
+    if lower_receiver.endswith("@cyberwatch.com") or lower_receiver.endswith("@example.com"):
+        print(f"[Email Service] Redirecting email from dummy recipient '{receiver}' to configured report receiver '{report_receiver}' for testing.")
+        receiver = report_receiver
 
     # ALWAYS write to a local mail_log.txt file so developer can inspect emails instantly!
     try:
@@ -69,11 +79,27 @@ def send_otp_email(receiver_email: str, otp: str):
     from email.mime.text import MIMEText
     import datetime
     
-    sender_email = "vu.cse.241fa04677@gmail.com"
-    sender_password = "bhrs ligq hclp nobj"
+    try:
+        sender_email, sender_password = _get_smtp_credentials()
+    except Exception as cred_err:
+        print(f"[Email Service] Failed to get SMTP credentials: {repr(cred_err)}")
+        return False
+
+    report_receiver = os.environ.get("REPORT_RECEIVER_EMAIL", sender_email)
     
-    subject = "OTP Verification"
-    body = f"Your OTP is: {otp}"
+    lower_receiver = receiver_email.lower()
+    if lower_receiver.endswith("@cyberwatch.com") or lower_receiver.endswith("@example.com"):
+        print(f"[Email Service] Redirecting OTP email from dummy recipient '{receiver_email}' to configured report receiver '{report_receiver}' for testing.")
+        receiver_email = report_receiver
+    
+    subject = "[CyberWatch] Secure Verification OTP Code"
+    body = (
+        f"Hello,\n\n"
+        f"Your secure verification code for CyberWatch is: {otp}\n\n"
+        f"This code is valid for 5 minutes. If you did not request this verification, please ignore this email.\n\n"
+        f"Best regards,\n"
+        f"CyberWatch Security Team"
+    )
     
     # ALWAYS write to persistent local mail_log.txt first so developer can inspect OTPs instantly!
     try:
@@ -110,16 +136,28 @@ def send_otp_email(receiver_email: str, otp: str):
 
 
 def send_spam_report_email(user_email: str, score: float, level: str, comment: str):
-    subject = f"Spam Report: {user_email}"
+    try:
+        sender_email, _ = _get_smtp_credentials()
+    except Exception:
+        sender_email = DEFAULT_SMTP_SENDER
+    receiver = os.environ.get("REPORT_RECEIVER_EMAIL", sender_email)
+    
+    subject = f"[CyberWatch Security Alert] User Flagged for Spam/Abuse: {user_email}"
     body = (
-        f"A user has been flagged for spam or abusive content.\n\n"
-        f"User Email: {user_email}\n"
-        f"Threat Level: {level}\n"
-        f"Toxicity Score: {score:.4f}\n\n"
-        f"Comment:\n{comment}\n\n"
-        f"This user account has been blocked from signing in and should be reviewed."
+        f"CyberWatch Security Alert:\n\n"
+        f"A user has been flagged for spam or abusive content by the AI classification engine.\n\n"
+        f"User Details:\n"
+        f"- Email: {user_email}\n"
+        f"- Threat Level: {level}\n"
+        f"- Toxicity Score: {score:.4f}\n\n"
+        f"Flagged Comment/Content:\n"
+        f"\"{comment}\"\n\n"
+        f"Action Taken:\n"
+        f"This user account has been automatically blocked from signing in and is queued for administrative review.\n\n"
+        f"Sincerely,\n"
+        f"CyberWatch Threat Monitoring System"
     )
-    send_email(DEFAULT_REPORT_RECEIVER, subject, body)
+    send_email(receiver, subject, body)
 
 
 def send_warning_email_to_user(user_email: str, warnings_count: int, comment: str, is_blocked: bool):
