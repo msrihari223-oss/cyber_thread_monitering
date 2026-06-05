@@ -2627,17 +2627,20 @@
                 }
 
                 const data = await postResponse.json();
-                showMessage('success', videoUrl ? '🎬 Video posted!' : imageUrl ? '📷 Photo posted!' : '✅ Post created!', 'postMessages');
-                setTimeout(() => {
+                if (data.warning_issued) {
                     closeCreatePostModal();
                     loadFeed();
-                    if (data.warning_issued) {
-                        showWarningOverlay(data.is_blocked ? 'blocked' : 'warning', data.warnings_count);
-                        if (data.is_blocked) {
-                            setTimeout(() => { localStorage.clear(); window.location.href = '/'; }, 5000);
-                        }
+                    showWarningOverlay(data.is_blocked ? 'blocked' : 'warning', data.warnings_count);
+                    if (data.is_blocked) {
+                        setTimeout(() => { localStorage.clear(); window.location.href = '/'; }, 5000);
                     }
-                }, 900);
+                } else {
+                    showMessage('success', videoUrl ? '🎬 Video posted!' : imageUrl ? '📷 Photo posted!' : '✅ Post created!', 'postMessages');
+                    setTimeout(() => {
+                        closeCreatePostModal();
+                        loadFeed();
+                    }, 900);
+                }
             } catch (error) {
                 showMessage('error', 'Failed: ' + error.message, 'postMessages');
             } finally {

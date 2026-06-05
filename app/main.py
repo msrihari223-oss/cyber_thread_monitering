@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Depends, UploadFile, File
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Depends, UploadFile, File, BackgroundTasks
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -205,7 +205,7 @@ def signup(data: SignupSchema):
 
 
 @app.post("/forgot-password")
-def forgot_password(data: ForgotPasswordSchema):
+def forgot_password(data: ForgotPasswordSchema, background_tasks: BackgroundTasks):
     db = SessionLocal()
     try:
         email = data.email.strip().lower()
@@ -224,7 +224,7 @@ def forgot_password(data: ForgotPasswordSchema):
 
         # Send OTP via email as requested
         from .email_service import send_otp_email
-        send_otp_email(user.email, otp_code)
+        background_tasks.add_task(send_otp_email, user.email, otp_code)
 
         return {"message": "OTP sent to your email successfully!"}
     except HTTPException:
@@ -237,7 +237,7 @@ def forgot_password(data: ForgotPasswordSchema):
 
 
 @app.get("/forgot-password/otp")
-def forgot_password_get(email: str):
+def forgot_password_get(email: str, background_tasks: BackgroundTasks):
     db = SessionLocal()
     try:
         email_clean = email.strip().lower()
@@ -255,7 +255,7 @@ def forgot_password_get(email: str):
 
         # Send OTP via email as requested
         from .email_service import send_otp_email
-        send_otp_email(user.email, otp_code)
+        background_tasks.add_task(send_otp_email, user.email, otp_code)
 
         return {"message": "OTP sent to your email successfully!"}
     finally:
@@ -350,7 +350,7 @@ def user_status(user_id: int):
 
 
 @app.post("/analyze")
-def analyze(data: CommentSchema):
+def analyze(data: CommentSchema, background_tasks: BackgroundTasks):
     db = SessionLocal()
     try:
         user = db.query(User).filter(User.id == data.user_id).first()
@@ -363,9 +363,10 @@ def analyze(data: CommentSchema):
             action = "Immediate Block"
             user.status = "blocked"
             try:
-                send_spam_report_email(user.email, score, level, data.comment)
+                from .email_service import send_spam_report_email
+                background_tasks.add_task(send_spam_report_email, user.email, score, level, data.comment)
             except Exception as e:
-                print("Spam report email failed:", repr(e))
+                print("Spam report email failed scheduling:", repr(e))
 
         user.threat_score = score
         violation = Violation(
@@ -935,7 +936,7 @@ async def upload_video(file: UploadFile = File(...)):
 
 
 @app.post("/api/posts/create")
-def create_post(data: CreatePostSchema):
+def create_post(data: CreatePostSchema, background_tasks: BackgroundTasks):
     """Create a new post — auto-checks toxicity and issues warnings"""
     db = SessionLocal()
     try:
@@ -985,23 +986,25 @@ def create_post(data: CreatePostSchema):
                 user.status = "blocked"
                 is_blocked = True
 
-            # Send email notifications (non-blocking)
+            # Send email notifications asynchronously using background tasks
             try:
-                send_warning_email_to_user(
+                from .email_service import send_warning_email_to_user, send_spam_report_email
+                background_tasks.add_task(
+                    send_warning_email_to_user,
                     user_email=user.email,
                     warnings_count=user.warnings_count or 0,
                     comment=data.content,
                     is_blocked=is_blocked
                 )
-                # ALWAYS send spam report email to admin for every warning as requested!
-                send_spam_report_email(
+                background_tasks.add_task(
+                    send_spam_report_email,
                     user_email=user.email,
                     score=toxicity_score,
                     level=threat_level,
                     comment=data.content
                 )
             except Exception as email_err:
-                print(f"Failed to send toxicity emails: {email_err}")
+                print(f"Failed to schedule toxicity emails: {email_err}")
 
         # Create post
         post = Post(
@@ -1334,7 +1337,7 @@ def like_post(post_id: int, data: LikePostSchema):
 
 
 @app.post("/api/posts/{post_id}/comment")
-def comment_post(post_id: int, data: CreateCommentSchema):
+def comment_post(post_id: int, data: CreateCommentSchema, background_tasks: BackgroundTasks):
     """Add comment to post — auto-checks toxicity and issues warnings"""
     db = SessionLocal()
     try:
@@ -1388,23 +1391,25 @@ def comment_post(post_id: int, data: CreateCommentSchema):
                 user.status = "blocked"
                 is_blocked = True
 
-            # Send email notifications (non-blocking)
+            # Send email notifications asynchronously using background tasks
             try:
-                send_warning_email_to_user(
+                from .email_service import send_warning_email_to_user, send_spam_report_email
+                background_tasks.add_task(
+                    send_warning_email_to_user,
                     user_email=user.email,
                     warnings_count=user.warnings_count or 0,
                     comment=data.content,
                     is_blocked=is_blocked
                 )
-                # ALWAYS send spam report email to admin for every warning as requested!
-                send_spam_report_email(
+                background_tasks.add_task(
+                    send_spam_report_email,
                     user_email=user.email,
                     score=toxicity_score,
                     level=threat_level,
                     comment=data.content
                 )
             except Exception as email_err:
-                print(f"Failed to send toxicity emails: {email_err}")
+                print(f"Failed to schedule toxicity emails: {email_err}")
 
         # Save comment
         comment = PostComment(
