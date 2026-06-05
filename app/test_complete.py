@@ -1,12 +1,14 @@
 import json
 import urllib.request
+import uuid
 
 base = 'http://127.0.0.1:8000'
 
 # Test signup
 print("Testing Sign Up...")
+signup_email = f"testuser_{uuid.uuid4().hex[:8]}@example.com"
 signup_data = json.dumps({
-    "email": "testuser@example.com",
+    "email": signup_email,
     "phone": "1234567890",
     "password": "password123"
 }).encode('utf-8')
@@ -20,11 +22,11 @@ req = urllib.request.Request(
 
 try:
     with urllib.request.urlopen(req) as resp:
-        print(f"✓ Signup: {resp.status}")
+        print(f"[OK] Signup: {resp.status}")
         data = json.loads(resp.read().decode())
         print(f"  Token: {data['access_token'][:20]}...")
 except Exception as e:
-    print(f"✗ Signup failed: {e}")
+    print(f"[FAIL] Signup failed: {e}")
 
 # Test login
 print("\nTesting Login...")
@@ -42,11 +44,11 @@ req = urllib.request.Request(
 
 try:
     with urllib.request.urlopen(req) as resp:
-        print(f"✓ Login: {resp.status}")
+        print(f"[OK] Login: {resp.status}")
         data = json.loads(resp.read().decode())
         print(f"  Token: {data['access_token'][:20]}...")
 except Exception as e:
-    print(f"✗ Login failed: {e}")
+    print(f"[FAIL] Login failed: {e}")
 
 # Test forgot password
 print("\nTesting Forgot Password...")
@@ -63,11 +65,11 @@ req = urllib.request.Request(
 
 try:
     with urllib.request.urlopen(req) as resp:
-        print(f"✓ Forgot Password: {resp.status}")
+        print(f"[OK] Forgot Password: {resp.status}")
         data = json.loads(resp.read().decode())
-        print(f"  Reset URL: {data['reset_url']}")
+        print(f"  Message: {data['message']}")
 except Exception as e:
-    print(f"✗ Forgot Password failed: {e}")
+    print(f"[FAIL] Forgot Password failed: {e}")
 
 # Test analyze
 print("\nTesting Analyze...")
@@ -85,11 +87,11 @@ req = urllib.request.Request(
 
 try:
     with urllib.request.urlopen(req) as resp:
-        print(f"✓ Analyze: {resp.status}")
+        print(f"[OK] Analyze: {resp.status}")
         data = json.loads(resp.read().decode())
         print(f"  Level: {data['level']}, Score: {data['score']:.4f}, Action: {data['action']}")
 except Exception as e:
-    print(f"✗ Analyze failed: {e}")
+    print(f"[FAIL] Analyze failed: {e}")
 
 # Test admin stats
 print("\nTesting Admin Stats...")
@@ -97,10 +99,11 @@ req = urllib.request.Request(base + '/admin/stats')
 
 try:
     with urllib.request.urlopen(req) as resp:
-        print(f"✓ Admin Stats: {resp.status}")
+        print(f"[OK] Admin Stats: {resp.status}")
         data = json.loads(resp.read().decode())
         print(f"  Total Users: {data['total_users']}, Blocked: {data['blocked_users']}, Blacklisted: {data['blacklisted_users']}")
 except Exception as e:
-    print(f"✗ Admin Stats failed: {e}")
+    print(f"[FAIL] Admin Stats failed: {e}")
 
-print("\n✅ All tests completed!")
+print("\n[OK] All tests completed!")
+
