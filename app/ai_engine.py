@@ -7,14 +7,24 @@ BAD_WORDS = [
     "destroy you", "beat you", "hurt you", "hacked", "scam"
 ]
 
-try:
-    classifier = pipeline(
-        "text-classification",
-        model="unitary/toxic-bert"
-    )
-except Exception as e:
-    print(f"Transformers pipeline failed to load: {e}. Using fallback keyword classifier.")
-    classifier = None
+classifier = None
+classifier_loaded = False
+
+def get_classifier():
+    global classifier, classifier_loaded
+    if not classifier_loaded:
+        try:
+            print("[AI Engine] Loading Transformers toxic-bert pipeline (lazy-loading)...")
+            classifier = pipeline(
+                "text-classification",
+                model="unitary/toxic-bert"
+            )
+            print("[AI Engine] Transformers pipeline loaded successfully.")
+        except Exception as e:
+            print(f"[AI Engine] Transformers pipeline failed to load: {e}. Using fallback keyword classifier.")
+            classifier = None
+        classifier_loaded = True
+    return classifier
 
 
 def analyze_text(text):
@@ -30,9 +40,10 @@ def analyze_text(text):
 
     # 2. Try the neural network classifier
     score = 0.0
-    if classifier:
+    clf = get_classifier()
+    if clf:
         try:
-            res = classifier(text)
+            res = clf(text)
             if res:
                 result = res[0]
                 # If the classifier predicts toxic labels with high probability
