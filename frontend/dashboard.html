@@ -1856,6 +1856,30 @@
                         </table>
                     </div>
                 </div>
+
+                <!-- Mail Logs Table -->
+                <div class="admin-table-card" id="adminMailLogsCard" style="margin-top: 30px;">
+                    <div class="admin-table-header" style="display:flex; justify-content:space-between; align-items:center;">
+                        <div class="admin-table-title" id="adminMailLogsTitle">📬 System Mail Logs (Latest 30)</div>
+                        <button class="admin-refresh-btn" onclick="loadMailLogs()">🔄 Refresh Logs</button>
+                    </div>
+                    <div style="overflow-x:auto;">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Recipient</th>
+                                    <th>Subject</th>
+                                    <th>Body/Content Preview</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminMailLogsBody">
+                                <tr><td colspan="5" class="admin-empty">Loading logs...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -2843,9 +2867,15 @@
             if (isAdmin) {
                 document.getElementById('adminStatCards').style.display = 'grid';
                 document.getElementById('adminUsersCard').style.display = 'block';
+                if (document.getElementById('adminMailLogsCard')) {
+                    document.getElementById('adminMailLogsCard').style.display = 'block';
+                }
             } else {
                 document.getElementById('adminStatCards').style.display = 'none';
                 document.getElementById('adminUsersCard').style.display = 'none';
+                if (document.getElementById('adminMailLogsCard')) {
+                    document.getElementById('adminMailLogsCard').style.display = 'none';
+                }
             }
 
             try {
@@ -2858,6 +2888,7 @@
                 // Render stats if admin
                 if (isAdmin) {
                     renderAdminStatCards(data);
+                    loadMailLogs();
                 }
 
                 const now = new Date();
@@ -2891,6 +2922,52 @@
                         `<div style="grid-column:1/-1;text-align:center;padding:30px;color:#c33;">⚠️ ${e.message}</div>`;
                 }
             }
+        }
+
+        async function loadMailLogs() {
+            if (!state.isAdmin) return;
+            try {
+                const res = await fetch('/api/admin/mail-logs');
+                if (!res.ok) throw new Error('Failed to load mail logs');
+                const logs = await res.json();
+                renderMailLogsTable(logs);
+            } catch (e) {
+                console.error('Mail logs error:', e);
+                const tbody = document.getElementById('adminMailLogsBody');
+                if (tbody) {
+                    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#ef4444;padding:20px;">⚠️ Error loading logs: ${e.message}</td></tr>`;
+                }
+            }
+        }
+
+        function renderMailLogsTable(logs) {
+            const tbody = document.getElementById('adminMailLogsBody');
+            if (!tbody) return;
+            if (!logs || logs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="admin-empty">No mail logs found.</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = logs.map(log => {
+                let statusBadge = '';
+                if (log.status && log.status.startsWith('Success')) {
+                    statusBadge = `<span class="badge badge-active">${escapeHtml(log.status)}</span>`;
+                } else {
+                    statusBadge = `<span class="badge badge-blocked" title="${escapeHtml(log.status || 'Failed')}">${escapeHtml(log.status || 'Failed')}</span>`;
+                }
+                
+                const bodyPreview = log.body && log.body.length > 100 ? escapeHtml(log.body.substring(0, 100)) + '...' : escapeHtml(log.body || '');
+                
+                return `
+                    <tr>
+                        <td style="white-space:nowrap;color:#888;">${escapeHtml(log.timestamp || '')}</td>
+                        <td style="font-weight:600;color:var(--accent);">${escapeHtml(log.receiver || '')}</td>
+                        <td style="font-weight:700;">${escapeHtml(log.subject || '')}</td>
+                        <td style="color:#ccc;max-width:320px;overflow:hidden;text-overflow:ellipsis;" title="${escapeHtml(log.body || '')}">${bodyPreview}</td>
+                        <td>${statusBadge}</td>
+                    </tr>
+                `;
+            }).join('');
         }
 
         function filterUsers(filterType) {

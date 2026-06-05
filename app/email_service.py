@@ -24,24 +24,107 @@ def _get_smtp_credentials():
     return sender, app_password
 
 
-def send_email(receiver: str, subject: str, body: str):
+def log_email_to_db(sender: str, receiver: str, subject: str, body: str, status: str):
+    try:
+        try:
+            from .database import SessionLocal
+            from .models import MailLog
+        except (ImportError, ValueError):
+            from database import SessionLocal
+            from models import MailLog
+            
+        db = SessionLocal()
+        try:
+            log_entry = MailLog(
+                sender=sender,
+                receiver=receiver,
+                subject=subject,
+                body=body,
+                status=status
+            )
+            db.add(log_entry)
+            db.commit()
+            print(f"[Email Service] Saved email log to database with status: {status}")
+        finally:
+            db.close()
+    except Exception as db_err:
+        print(f"[Email Service] Failed to save email log to database: {repr(db_err)}")
+
+
+def _resolve_receiver(receiver: str, sender_email: str):
+    report_receiver = os.environ.get("REPORT_RECEIVER_EMAIL", sender_email)
+    lower_receiver = receiver.lower()
+    
+    redirect_all = os.environ.get("REDIRECT_ALL_EMAILS", "false").lower() == "true"
+    is_dummy = lower_receiver.endswith("@cyberwatch.com") or lower_receiver.endswith("@example.com")
+    
+    if (redirect_all or is_dummy) and report_receiver and lower_receiver != report_receiver.lower():
+        print(f"[Email Service] Redirecting email from '{receiver}' to configured report receiver '{report_receiver}' for testing.")
+        return report_receiver
+    return receiver
+
+
+def _send_smtp_email(sender_email: str, sender_password: str, receiver: str, subject: str, body: str):
     from email.mime.text import MIMEText
+    
+    try:
+        msg = MIMEText(body, 'plain', 'utf-8')
+        msg["Subject"] = subject
+        msg["From"] = sender_email
+        msg["To"] = receiver
+        msg_str = msg.as_string()
+    except Exception as mime_err:
+        err_msg = f"MIME creation failed: {repr(mime_err)}"
+        print(f"[Email Service] {err_msg}")
+        log_email_to_db(sender_email, receiver, subject, body, f"Failed ({err_msg})")
+        return False
+
+    # Try SMTP over SSL (Port 465)
+    try:
+        print(f"[Email Service] Connecting to smtp.gmail.com:465 via SSL...")
+        server = smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=10)
+        server.login(sender_email, sender_password)
+        server.sendmail(sender_email, receiver, msg_str)
+        server.quit()
+        print(f"[Email Service] SMTP SSL email successfully sent to {receiver}")
+        log_email_to_db(sender_email, receiver, subject, body, "Success (SSL/465)")
+        return True
+    except Exception as ssl_err:
+        ssl_err_msg = repr(ssl_err)
+        print(f"[Email Service] SMTP SSL failed: {ssl_err_msg}")
+        
+        # Fallback to SMTP over STARTTLS (Port 587)
+        try:
+            print(f"[Email Service] Connecting to smtp.gmail.com:587 via STARTTLS (Fallback)...")
+            server = smtplib.SMTP("smtp.gmail.com", 587, timeout=10)
+            server.starttls()
+            server.login(sender_email, sender_password)
+            server.sendmail(sender_email, receiver, msg_str)
+            server.quit()
+            print(f"[Email Service] SMTP STARTTLS email successfully sent to {receiver}")
+            log_email_to_db(sender_email, receiver, subject, body, "Success (STARTTLS/587)")
+            return True
+        except Exception as tls_err:
+            tls_err_msg = repr(tls_err)
+            print(f"[Email Service] SMTP STARTTLS failed: {tls_err_msg}")
+            
+            combined_err = f"SSL failed: {ssl_err_msg} | STARTTLS failed: {tls_err_msg}"
+            log_email_to_db(sender_email, receiver, subject, body, f"Failed ({combined_err})")
+            return False
+
+
+def send_email(receiver: str, subject: str, body: str):
     import datetime
     
     try:
         sender_email, sender_password = _get_smtp_credentials()
     except Exception as cred_err:
         print(f"[Email Service] Failed to get SMTP credentials: {repr(cred_err)}")
+        log_email_to_db(DEFAULT_SMTP_SENDER, receiver, subject, body, f"Failed (Credentials error: {repr(cred_err)})")
         return False
 
-    report_receiver = os.environ.get("REPORT_RECEIVER_EMAIL", sender_email)
-    
-    lower_receiver = receiver.lower()
-    if lower_receiver.endswith("@cyberwatch.com") or lower_receiver.endswith("@example.com"):
-        print(f"[Email Service] Redirecting email from dummy recipient '{receiver}' to configured report receiver '{report_receiver}' for testing.")
-        receiver = report_receiver
+    receiver = _resolve_receiver(receiver, sender_email)
 
-    # ALWAYS write to a local mail_log.txt file so developer can inspect emails instantly!
     try:
         log_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "mail_log.txt")
         with open(log_path, "a", encoding="utf-8") as f:
@@ -57,40 +140,20 @@ def send_email(receiver: str, subject: str, body: str):
     except Exception as log_err:
         print(f"[Email Service] Failed to write email to log file: {repr(log_err)}")
 
-    try:
-        msg = MIMEText(body)
-        msg["Subject"] = subject
-        msg["From"] = sender_email
-        msg["To"] = receiver
-
-        server = smtplib.SMTP("smtp.gmail.com", 587, timeout=10)
-        server.starttls()
-        server.login(sender_email, sender_password)
-        server.sendmail(sender_email, receiver, msg.as_string())
-        server.quit()
-        print(f"[Email Service] SMTP email successfully sent to {receiver}")
-        return True
-    except Exception as smtp_err:
-        print(f"[Email Service] SMTP send failed to {receiver}: {repr(smtp_err)}")
-        return False
+    return _send_smtp_email(sender_email, sender_password, receiver, subject, body)
 
 
 def send_otp_email(receiver_email: str, otp: str):
-    from email.mime.text import MIMEText
     import datetime
     
     try:
         sender_email, sender_password = _get_smtp_credentials()
     except Exception as cred_err:
         print(f"[Email Service] Failed to get SMTP credentials: {repr(cred_err)}")
+        log_email_to_db(DEFAULT_SMTP_SENDER, receiver_email, "[CyberWatch] Secure Verification OTP Code", f"OTP: {otp}", f"Failed (Credentials error: {repr(cred_err)})")
         return False
 
-    report_receiver = os.environ.get("REPORT_RECEIVER_EMAIL", sender_email)
-    
-    lower_receiver = receiver_email.lower()
-    if lower_receiver.endswith("@cyberwatch.com") or lower_receiver.endswith("@example.com"):
-        print(f"[Email Service] Redirecting OTP email from dummy recipient '{receiver_email}' to configured report receiver '{report_receiver}' for testing.")
-        receiver_email = report_receiver
+    receiver_email = _resolve_receiver(receiver_email, sender_email)
     
     subject = "[CyberWatch] Secure Verification OTP Code"
     body = (
@@ -101,7 +164,6 @@ def send_otp_email(receiver_email: str, otp: str):
         f"CyberWatch Security Team"
     )
     
-    # ALWAYS write to persistent local mail_log.txt first so developer can inspect OTPs instantly!
     try:
         log_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "mail_log.txt")
         with open(log_path, "a", encoding="utf-8") as f:
@@ -117,22 +179,7 @@ def send_otp_email(receiver_email: str, otp: str):
     except Exception as log_err:
         print(f"[Email Service] Failed to write email details to local log: {repr(log_err)}")
         
-    try:
-        msg = MIMEText(body)
-        msg["Subject"] = subject
-        msg["From"] = sender_email
-        msg["To"] = receiver_email
-        
-        server = smtplib.SMTP("smtp.gmail.com", 587, timeout=10)
-        server.starttls()
-        server.login(sender_email, sender_password)
-        server.sendmail(sender_email, receiver_email, msg.as_string())
-        server.quit()
-        print(f"[Email Service] SMTP email successfully sent to {receiver_email}")
-        return True
-    except Exception as e:
-        print(f"[Email Service] SMTP send failed to {receiver_email}: {repr(e)}")
-        return False
+    return _send_smtp_email(sender_email, sender_password, receiver_email, subject, body)
 
 
 def send_spam_report_email(user_email: str, score: float, level: str, comment: str):
@@ -229,9 +276,11 @@ def send_otp_sms(phone: str, otp: str):
         with urllib.request.urlopen(req, timeout=10) as response:
             res_body = response.read().decode('utf-8')
             print(f"[SMS Service] Fast2SMS Response: {res_body}")
+            log_email_to_db("SMS_Gateway", phone, "[SMS OTP] Secure Verification Code", f"OTP: {otp}", "Success (Fast2SMS)")
             return True
     except Exception as e:
-        print(f"[SMS Service] Failed to send SMS via Fast2SMS: {repr(e)}")
+        err_msg = repr(e)
+        print(f"[SMS Service] Failed to send SMS via Fast2SMS: {err_msg}")
         
         # Fallback to Textbelt
         try:
@@ -250,8 +299,11 @@ def send_otp_sms(phone: str, otp: str):
             with urllib.request.urlopen(req, timeout=10) as response:
                 res_body = response.read().decode('utf-8')
                 print(f"[SMS Service] Textbelt Response: {res_body}")
+                log_email_to_db("SMS_Gateway", phone, "[SMS OTP] Secure Verification Code", f"OTP: {otp}", "Success (Textbelt Fallback)")
                 return True
         except Exception as textbelt_err:
-            print(f"[SMS Service] Textbelt fallback failed: {repr(textbelt_err)}")
+            textbelt_err_msg = repr(textbelt_err)
+            print(f"[SMS Service] Textbelt fallback failed: {textbelt_err_msg}")
+            log_email_to_db("SMS_Gateway", phone, "[SMS OTP] Secure Verification Code", f"OTP: {otp}", f"Failed (Fast2SMS: {err_msg} | Textbelt: {textbelt_err_msg})")
             
     return False

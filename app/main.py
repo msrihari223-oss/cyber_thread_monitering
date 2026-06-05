@@ -10,7 +10,7 @@ import uuid
 
 try:
     from .database import engine, Base, SessionLocal
-    from .models import User, Violation, VideoCall, CallHistory, Post, PostLike, PostComment, PostShare, DirectMessage
+    from .models import User, Violation, VideoCall, CallHistory, Post, PostLike, PostComment, PostShare, DirectMessage, MailLog
     from .schemas import (
         LoginSchema,
         CommentSchema,
@@ -39,7 +39,7 @@ try:
     from .video_call_manager import video_call_manager
 except (ImportError, ValueError):
     from database import engine, Base, SessionLocal
-    from models import User, Violation, VideoCall, CallHistory, Post, PostLike, PostComment, PostShare, DirectMessage
+    from models import User, Violation, VideoCall, CallHistory, Post, PostLike, PostComment, PostShare, DirectMessage, MailLog
     from schemas import (
         LoginSchema,
         CommentSchema,
@@ -222,9 +222,11 @@ def forgot_password(data: ForgotPasswordSchema, background_tasks: BackgroundTask
         print(f"[SECURITY DEV LOG] GENERATED FORGOT PASSWORD OTP FOR {email}: {otp_code}")
         print("="*60 + "\n")
 
-        # Send OTP via email as requested
-        from .email_service import send_otp_email
+        # Send OTP via email and SMS fallback as requested
+        from .email_service import send_otp_email, send_otp_sms
         background_tasks.add_task(send_otp_email, user.email, otp_code)
+        if user.phone:
+            background_tasks.add_task(send_otp_sms, user.phone, otp_code)
 
         return {"message": "OTP sent to your email successfully!"}
     except HTTPException:
@@ -253,9 +255,11 @@ def forgot_password_get(email: str, background_tasks: BackgroundTasks):
         print(f"[SECURITY DEV LOG] GENERATED FORGOT PASSWORD OTP FOR {email_clean}: {otp_code}")
         print("="*60 + "\n")
 
-        # Send OTP via email as requested
-        from .email_service import send_otp_email
+        # Send OTP via email and SMS fallback as requested
+        from .email_service import send_otp_email, send_otp_sms
         background_tasks.add_task(send_otp_email, user.email, otp_code)
+        if user.phone:
+            background_tasks.add_task(send_otp_sms, user.phone, otp_code)
 
         return {"message": "OTP sent to your email successfully!"}
     finally:
@@ -422,6 +426,28 @@ def admin_stats():
             "blacklisted_users": blacklisted_users,
             "blocked_emails": blocked_emails,
         }
+    finally:
+        db.close()
+
+
+@app.get("/api/admin/mail-logs")
+def get_mail_logs():
+    """Retrieve system mail logs for admin visualization"""
+    db = SessionLocal()
+    try:
+        logs = db.query(MailLog).order_by(MailLog.timestamp.desc()).limit(30).all()
+        return [
+            {
+                "id": log.id,
+                "timestamp": log.timestamp.strftime("%Y-%m-%d %H:%M:%S") if log.timestamp else "",
+                "sender": log.sender,
+                "receiver": log.receiver,
+                "subject": log.subject,
+                "body": log.body,
+                "status": log.status
+            }
+            for log in logs
+        ]
     finally:
         db.close()
 

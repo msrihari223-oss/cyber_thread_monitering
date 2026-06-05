@@ -113,4 +113,16 @@ class DirectMessage(Base):
     message_text = Column(Text, nullable=True)
     shared_post_id = Column(Integer, nullable=True)  # References posts.id
     created_at = Column(DateTime, default=datetime.utcnow)
-    is_read = Column(Boolean, default=False)
+    is_read = Column(Boolean, default=False)
+
+
+class MailLog(Base):
+    __tablename__ = "mail_logs"
+
+    id = Column(Integer, primary_key=True)
+    timestamp = Column(DateTime, default=datetime.utcnow)
+    sender = Column(String)
+    receiver = Column(String)
+    subject = Column(String)
+    body = Column(Text)
+    status = Column(String)
