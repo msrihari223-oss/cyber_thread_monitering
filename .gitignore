@@ -1,0 +1,17 @@
+# Virtual Environment
+.venv/
+venv/
+ENV/
+
+# Python Cache & Compiled Files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# User Media uploads (prevent repository bloat)
+media/*
+!media/.gitkeep
+
+# Local Logs & Secrets
+mail_log.txt
+.env
