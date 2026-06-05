@@ -947,3 +947,253 @@ Sincerely,
 CyberWatch Threat Monitoring System
 ============================================================
 
+============================================================
+TIMESTAMP: 2026-06-04 15:43:27
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: Community Guidelines Warning (1/3)
+------------------------------------------------------------
+Dear User,
+
+This is warning 1 of 3 for your account vu.cse.241fa04677@gmail.com.
+We detected highly inappropriate or toxic language in your comment:
+"i will kill you"
+
+Please review our community guidelines. Posting abusive content, cyber threats, or offensive language is strictly prohibited.
+Please note that receiving 3 warnings will result in the permanent suspension of your account.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-04 15:43:29
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: Community Guidelines Warning (1/3)
+------------------------------------------------------------
+Dear User,
+
+This is warning 1 of 3 for your account vu.cse.241fa04677@gmail.com.
+We detected highly inappropriate or toxic language in your comment:
+"i will kill you"
+
+Please review our community guidelines. Posting abusive content, cyber threats, or offensive language is strictly prohibited.
+Please note that receiving 3 warnings will result in the permanent suspension of your account.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-04 15:43:29
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: Community Guidelines Warning (1/3)
+------------------------------------------------------------
+Dear User,
+
+This is warning 1 of 3 for your account vu.cse.241fa04677@gmail.com.
+We detected highly inappropriate or toxic language in your comment:
+"i will kill you"
+
+Please review our community guidelines. Posting abusive content, cyber threats, or offensive language is strictly prohibited.
+Please note that receiving 3 warnings will result in the permanent suspension of your account.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-04 15:43:32
+FROM: vu.cse.241fa04677@gmail.com
+TO: merikinapallisrihari@gmail.com
+SUBJECT: [CyberWatch Security Alert] User Flagged for Spam/Abuse: vu.cse.241fa04677@gmail.com
+------------------------------------------------------------
+CyberWatch Security Alert:
+
+A user has been flagged for spam or abusive content by the AI classification engine.
+
+User Details:
+- Email: vu.cse.241fa04677@gmail.com
+- Threat Level: CRITICAL
+- Toxicity Score: 0.9500
+
+Flagged Comment/Content:
+"i will kill you"
+
+Action Taken:
+This user account has been automatically blocked from signing in and is queued for administrative review.
+
+Sincerely,
+CyberWatch Threat Monitoring System
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-04 15:43:33
+FROM: vu.cse.241fa04677@gmail.com
+TO: merikinapallisrihari@gmail.com
+SUBJECT: [CyberWatch Security Alert] User Flagged for Spam/Abuse: vu.cse.241fa04677@gmail.com
+------------------------------------------------------------
+CyberWatch Security Alert:
+
+A user has been flagged for spam or abusive content by the AI classification engine.
+
+User Details:
+- Email: vu.cse.241fa04677@gmail.com
+- Threat Level: CRITICAL
+- Toxicity Score: 0.9500
+
+Flagged Comment/Content:
+"i will kill you"
+
+Action Taken:
+This user account has been automatically blocked from signing in and is queued for administrative review.
+
+Sincerely,
+CyberWatch Threat Monitoring System
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-04 15:43:34
+FROM: vu.cse.241fa04677@gmail.com
+TO: merikinapallisrihari@gmail.com
+SUBJECT: [CyberWatch Security Alert] User Flagged for Spam/Abuse: vu.cse.241fa04677@gmail.com
+------------------------------------------------------------
+CyberWatch Security Alert:
+
+A user has been flagged for spam or abusive content by the AI classification engine.
+
+User Details:
+- Email: vu.cse.241fa04677@gmail.com
+- Threat Level: CRITICAL
+- Toxicity Score: 0.9500
+
+Flagged Comment/Content:
+"i will kill you"
+
+Action Taken:
+This user account has been automatically blocked from signing in and is queued for administrative review.
+
+Sincerely,
+CyberWatch Threat Monitoring System
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-04 20:11:51
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: Community Guidelines Warning (2/3)
+------------------------------------------------------------
+Dear User,
+
+This is warning 2 of 3 for your account vu.cse.241fa04677@gmail.com.
+We detected highly inappropriate or toxic language in your comment:
+"i will kill you"
+
+Please review our community guidelines. Posting abusive content, cyber threats, or offensive language is strictly prohibited.
+Please note that receiving 3 warnings will result in the permanent suspension of your account.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-04 20:11:56
+FROM: vu.cse.241fa04677@gmail.com
+TO: merikinapallisrihari@gmail.com
+SUBJECT: [CyberWatch Security Alert] User Flagged for Spam/Abuse: vu.cse.241fa04677@gmail.com
+------------------------------------------------------------
+CyberWatch Security Alert:
+
+A user has been flagged for spam or abusive content by the AI classification engine.
+
+User Details:
+- Email: vu.cse.241fa04677@gmail.com
+- Threat Level: CRITICAL
+- Toxicity Score: 0.9500
+
+Flagged Comment/Content:
+"i will kill you"
+
+Action Taken:
+This user account has been automatically blocked from signing in and is queued for administrative review.
+
+Sincerely,
+CyberWatch Threat Monitoring System
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-04 20:12:27
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: Account Suspended: CyberWatch Community Guidelines Violation
+------------------------------------------------------------
+Dear User,
+
+Your CyberWatch account associated with vu.cse.241fa04677@gmail.com has been permanently blocked.
+This action was taken due to repeated violations of our community guidelines (abusive language, spam, or cyber threats).
+
+Recent violation details:
+- Content: "i will kill you"
+- Warning status: 3 of 3 (Permanent Block)
+
+If you believe this was an error, please contact support.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-04 20:12:32
+FROM: vu.cse.241fa04677@gmail.com
+TO: merikinapallisrihari@gmail.com
+SUBJECT: [CyberWatch Security Alert] User Flagged for Spam/Abuse: vu.cse.241fa04677@gmail.com
+------------------------------------------------------------
+CyberWatch Security Alert:
+
+A user has been flagged for spam or abusive content by the AI classification engine.
+
+User Details:
+- Email: vu.cse.241fa04677@gmail.com
+- Threat Level: CRITICAL
+- Toxicity Score: 0.9500
+
+Flagged Comment/Content:
+"i will kill you"
+
+Action Taken:
+This user account has been automatically blocked from signing in and is queued for administrative review.
+
+Sincerely,
+CyberWatch Threat Monitoring System
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-04 20:12:36
+FROM: vu.cse.241fa04677@gmail.com
+TO: vu.cse.241fa04677@gmail.com
+SUBJECT: Account Suspended: CyberWatch Community Guidelines Violation
+------------------------------------------------------------
+Dear User,
+
+Your CyberWatch account associated with vu.cse.241fa04677@gmail.com has been permanently blocked.
+This action was taken due to repeated violations of our community guidelines (abusive language, spam, or cyber threats).
+
+Recent violation details:
+- Content: "i will kill you"
+- Warning status: 3 of 3 (Permanent Block)
+
+If you believe this was an error, please contact support.
+============================================================
+
+============================================================
+TIMESTAMP: 2026-06-04 20:12:41
+FROM: vu.cse.241fa04677@gmail.com
+TO: merikinapallisrihari@gmail.com
+SUBJECT: [CyberWatch Security Alert] User Flagged for Spam/Abuse: vu.cse.241fa04677@gmail.com
+------------------------------------------------------------
+CyberWatch Security Alert:
+
+A user has been flagged for spam or abusive content by the AI classification engine.
+
+User Details:
+- Email: vu.cse.241fa04677@gmail.com
+- Threat Level: CRITICAL
+- Toxicity Score: 0.9500
+
+Flagged Comment/Content:
+"i will kill you"
+
+Action Taken:
+This user account has been automatically blocked from signing in and is queued for administrative review.
+
+Sincerely,
+CyberWatch Threat Monitoring System
+============================================================
+
