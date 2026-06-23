@@ -12,7 +12,7 @@ except Exception:
 
 
 DEFAULT_SMTP_SENDER = "vu.cse.241fa04677@gmail.com"
-DEFAULT_SMTP_APP_PASSWORD = "bhrs ligq hclp nobj"
+DEFAULT_SMTP_APP_PASSWORD = "ehge ymvj piem odxs"
 DEFAULT_REPORT_RECEIVER = os.environ.get("REPORT_RECEIVER_EMAIL", DEFAULT_SMTP_SENDER)
 
 
