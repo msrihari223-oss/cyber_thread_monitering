@@ -306,4 +306,4 @@ def send_otp_sms(phone: str, otp: str):
             print(f"[SMS Service] Textbelt fallback failed: {textbelt_err_msg}")
             log_email_to_db("SMS_Gateway", phone, "[SMS OTP] Secure Verification Code", f"OTP: {otp}", f"Failed (Fast2SMS: {err_msg} | Textbelt: {textbelt_err_msg})")
             
-    return False
+    return False
