@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Cyber Threat Monitoring</title>
+    <link rel="stylesheet" href="/static/cyber_agent.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
@@ -1882,6 +1883,34 @@
                         </table>
                     </div>
                 </div>
+
+                <!-- Security Violations & Device Logs Table -->
+                <div class="admin-table-card" id="adminViolationsCard" style="margin-top: 30px;">
+                    <div class="admin-table-header" style="display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <div class="admin-table-title">🚨 Threat Violations & Device Telemetry Logs</div>
+                            <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">Audit trail of toxic comments and originating client devices intercepted by Cyber Sentinel Agent</div>
+                        </div>
+                        <button class="admin-refresh-btn" onclick="loadViolationsLogs()">🔄 Refresh Violations</button>
+                    </div>
+                    <div style="overflow-x:auto;">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>User</th>
+                                    <th>Detected Device</th>
+                                    <th>Threat Level</th>
+                                    <th>Toxicity Score</th>
+                                    <th>Violating Content</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminViolationsBody">
+                                <tr><td colspan="6" class="admin-empty">Loading violations...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -2434,18 +2463,28 @@
 
             // Disable input while submitting
             input.disabled = true;
+            const device_info = window.cyberAgentInstance ? window.cyberAgentInstance.deviceInfo.deviceTitle : "Web Client";
 
             try {
                 const response = await fetch(`/api/posts/${postId}/comment`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ post_id: postId, user_id: state.userId, content })
+                    body: JSON.stringify({ post_id: postId, user_id: state.userId, content, device_info })
                 });
 
                 if (!response.ok) {
                     const err = await response.json().catch(() => ({}));
                     // If blocked at time of posting
                     if (response.status === 403) {
+                        if (window.cyberAgentInstance) {
+                            window.cyberAgentInstance.reactToThreat({
+                                score: 1.0,
+                                level: 'CRITICAL',
+                                comment: content,
+                                warningsCount: 3,
+                                isBlocked: true
+                            });
+                        }
                         showWarningOverlay('blocked', 0);
                     } else {
                         showToast('error', err.detail || 'Failed to post comment');
@@ -2463,8 +2502,17 @@
                 const post = state.posts.find(p => p.id === postId);
                 if (post) post.comments_count++;
 
-                // Show warning if toxic comment was detected
+                // Show warning and trigger Cyber Sentinel Voice Reaction if toxic comment was detected
                 if (data.warning_issued) {
+                    if (window.cyberAgentInstance) {
+                        window.cyberAgentInstance.reactToThreat({
+                            score: data.toxicity_score || 0.95,
+                            level: data.threat_level || (data.is_blocked ? 'CRITICAL' : 'HIGH'),
+                            comment: content,
+                            warningsCount: data.warnings_count || 1,
+                            isBlocked: data.is_blocked || false
+                        });
+                    }
                     showWarningOverlay(data.is_blocked ? 'blocked' : 'warning', data.warnings_count);
                     if (data.is_blocked) {
                         // Auto-logout after 5 seconds
@@ -2625,12 +2673,15 @@
 
                 progressFill.style.width = '85%';
 
+                const device_info = window.cyberAgentInstance ? window.cyberAgentInstance.deviceInfo.deviceTitle : "Web Client";
+
                 // Create post
                 const postBody = {
                     user_id: state.userId,
                     content: caption || (imageUrl ? 'Shared a photo' : videoUrl ? 'Shared a video' : ''),
                     image_url: imageUrl,
-                    video_url: videoUrl
+                    video_url: videoUrl,
+                    device_info: device_info
                 };
 
                 const postResponse = await fetch('/api/posts/create', {
@@ -2644,6 +2695,15 @@
                 if (!postResponse.ok) {
                     const errBody = await postResponse.json().catch(() => ({}));
                     if (postResponse.status === 403) {
+                        if (window.cyberAgentInstance) {
+                            window.cyberAgentInstance.reactToThreat({
+                                score: 1.0,
+                                level: 'CRITICAL',
+                                comment: postBody.content,
+                                warningsCount: 3,
+                                isBlocked: true
+                            });
+                        }
                         showWarningOverlay('blocked', 0);
                         closeCreatePostModal();
                     } else {
@@ -2654,6 +2714,15 @@
 
                 const data = await postResponse.json();
                 if (data.warning_issued) {
+                    if (window.cyberAgentInstance) {
+                        window.cyberAgentInstance.reactToThreat({
+                            score: data.toxicity_score || 0.95,
+                            level: data.is_blocked ? 'CRITICAL' : 'HIGH',
+                            comment: postBody.content,
+                            warningsCount: data.warnings_count || 1,
+                            isBlocked: data.is_blocked || false
+                        });
+                    }
                     closeCreatePostModal();
                     loadFeed();
                     showWarningOverlay(data.is_blocked ? 'blocked' : 'warning', data.warnings_count);
@@ -2684,18 +2753,41 @@
                 return;
             }
 
+            if (window.cyberAgentInstance) {
+                window.cyberAgentInstance.setAgentState('scanning');
+            }
+
             try {
+                const device_info = window.cyberAgentInstance ? window.cyberAgentInstance.deviceInfo.deviceTitle : "Web Client";
                 const response = await fetch('/analyze', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ user_id: state.userId, comment })
+                    body: JSON.stringify({ user_id: state.userId, comment, device_info })
                 });
 
                 if (!response.ok) throw new Error('Analysis failed');
 
                 const data = await response.json();
                 displayResult(data);
+
+                if (data.warning_issued || data.level === 'HIGH' || data.level === 'CRITICAL' || data.score >= 0.6) {
+                    if (window.cyberAgentInstance) {
+                        window.cyberAgentInstance.reactToThreat({
+                            score: data.score,
+                            level: data.level,
+                            comment: comment,
+                            warningsCount: data.warnings_count || 1,
+                            isBlocked: data.is_blocked || false
+                        });
+                    }
+                } else {
+                    if (window.cyberAgentInstance) {
+                        window.cyberAgentInstance.setAgentState('idle');
+                        window.cyberAgentInstance.speak(`Analysis complete on ${device_info}. Content classified as ${data.level} risk score ${(data.score * 100).toFixed(0)}%. No hazards detected.`, { isRisk: false });
+                    }
+                }
             } catch (error) {
+                if (window.cyberAgentInstance) window.cyberAgentInstance.setAgentState('idle');
                 alert('Error: ' + error.message);
             }
         }
@@ -2891,6 +2983,7 @@
                 if (isAdmin) {
                     renderAdminStatCards(data);
                     loadMailLogs();
+                    loadViolationsLogs();
                 }
 
                 const now = new Date();
@@ -3873,9 +3966,49 @@
             input.focus();
         }
 
+        async function loadViolationsLogs() {
+            if (!state.isAdmin) return;
+            try {
+                const res = await fetch('/api/admin/violations');
+                if (!res.ok) throw new Error('Failed to load violations');
+                const data = await res.json();
+                renderViolationsTable(data.violations || []);
+            } catch (e) {
+                console.error('Violations error:', e);
+                const tbody = document.getElementById('adminViolationsBody');
+                if (tbody) {
+                    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#ef4444;padding:20px;">⚠️ Error loading violations: ${e.message}</td></tr>`;
+                }
+            }
+        }
+
+        function renderViolationsTable(violations) {
+            const tbody = document.getElementById('adminViolationsBody');
+            if (!tbody) return;
+            if (!violations || violations.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="admin-empty">✅ No threat violations recorded yet.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = violations.map(v => {
+                const levelClass = v.level === 'CRITICAL' || v.level === 'HIGH' ? 'badge-blocked' : 'badge-active';
+                return `
+                    <tr>
+                        <td style="color:#888;">#${v.id}</td>
+                        <td style="font-weight:600;color:var(--text-primary);">${escapeHtml(v.user_email || 'User #' + v.user_id)}</td>
+                        <td style="color:var(--accent);font-weight:700;"><span style="background:rgba(56,189,248,0.1);padding:3px 8px;border-radius:6px;border:1px solid rgba(56,189,248,0.3);">💻 ${escapeHtml(v.device_info || 'Unknown Device')}</span></td>
+                        <td><span class="badge ${levelClass}">${escapeHtml(v.level || 'LOW')}</span></td>
+                        <td style="font-weight:700;color:#f87171;">${(v.toxicity_score * 100).toFixed(0)}%</td>
+                        <td style="color:#fca5a5;font-style:italic;max-width:280px;overflow:hidden;text-overflow:ellipsis;">"${escapeHtml(v.comment || '')}"</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
         // Start
         init();
     </script>
+    <script src="/static/cyber_agent.js"></script>
 </body>
 
 </html>

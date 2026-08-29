@@ -86,8 +86,33 @@ MEDIA_DIR = ROOT_DIR / "media"
 # Create media directory if it doesn't exist
 MEDIA_DIR.mkdir(exist_ok=True)
 
-# Mount static files for media
+# Mount static files for media & frontend assets
 app.mount("/media", StaticFiles(directory=str(MEDIA_DIR)), name="media")
+app.mount("/static", StaticFiles(directory=str(FRONTEND_DIR)), name="static")
+
+
+def migrate_db():
+    try:
+        import sqlite3
+        db_path = ROOT_DIR / "cyber_ai.db"
+        if db_path.exists():
+            conn = sqlite3.connect(str(db_path))
+            cursor = conn.cursor()
+            cursor.execute("PRAGMA table_info(violations)")
+            columns = [row[1] for row in cursor.fetchall()]
+            if "device_info" not in columns:
+                cursor.execute("ALTER TABLE violations ADD COLUMN device_info VARCHAR")
+                print("[DB Migration] Added device_info column to violations table.")
+            if "created_at" not in columns:
+                cursor.execute("ALTER TABLE violations ADD COLUMN created_at DATETIME")
+                print("[DB Migration] Added created_at column to violations table.")
+            conn.commit()
+            conn.close()
+    except Exception as e:
+        print("[DB Migration] Note:", e)
+
+
+migrate_db()
 
 
 def get_html_file(filename: str):
@@ -363,26 +388,45 @@ def analyze(data: CommentSchema, background_tasks: BackgroundTasks):
 
         score, level = analyze_text(data.comment)
         action = "Monitor"
-        if level == "HIGH" or level == "CRITICAL":
-            action = "Immediate Block"
-            user.status = "blocked"
+        warning_issued = False
+        is_blocked = False
+
+        if level == "HIGH" or level == "CRITICAL" or score >= 0.6:
+            warning_issued = True
+            user.warnings_count = (user.warnings_count or 0) + 1
+            if level in ["HIGH", "CRITICAL"] or user.warnings_count >= 3:
+                action = "Immediate Block"
+                user.status = "blocked"
+                is_blocked = True
+            else:
+                action = f"Warning {user.warnings_count}/3 Issued"
+
             try:
                 from .email_service import send_spam_report_email
                 background_tasks.add_task(send_spam_report_email, user.email, score, level, data.comment)
             except Exception as e:
                 print("Spam report email failed scheduling:", repr(e))
 
-        user.threat_score = score
+        user.threat_score = max(user.threat_score or 0, score)
         violation = Violation(
             user_id=user.id,
             comment=data.comment,
             toxicity_score=score,
             level=level,
+            device_info=data.device_info or "Web Client (Cyber Sentinel)"
         )
         db.add(violation)
         db.commit()
 
-        return {"score": score, "level": level, "action": action}
+        return {
+            "score": score,
+            "level": level,
+            "action": action,
+            "device_info": data.device_info or "Web Client",
+            "warning_issued": warning_issued,
+            "is_blocked": is_blocked or user.status == "blocked",
+            "warnings_count": user.warnings_count or 0
+        }
     finally:
         db.close()
 
@@ -448,6 +492,30 @@ def get_mail_logs():
             }
             for log in logs
         ]
+    finally:
+        db.close()
+
+
+@app.get("/api/admin/violations")
+def get_admin_violations(limit: int = 50):
+    """Retrieve security threat violations with device info and user emails"""
+    db = SessionLocal()
+    try:
+        violations = db.query(Violation).order_by(Violation.id.desc()).limit(limit).all()
+        results = []
+        for v in violations:
+            user = db.query(User).filter(User.id == v.user_id).first()
+            results.append({
+                "id": v.id,
+                "user_id": v.user_id,
+                "user_email": user.email if user else f"User #{v.user_id}",
+                "comment": v.comment,
+                "toxicity_score": round(v.toxicity_score or 0.0, 2),
+                "level": v.level or "LOW",
+                "device_info": getattr(v, "device_info", None) or "Web Client",
+                "created_at": getattr(v, "created_at", None).isoformat() if getattr(v, "created_at", None) else None
+            })
+        return {"violations": results}
     finally:
         db.close()
 
@@ -1004,6 +1072,7 @@ def create_post(data: CreatePostSchema, background_tasks: BackgroundTasks):
                 comment=data.content,
                 toxicity_score=toxicity_score,
                 level=threat_level,
+                device_info=data.device_info or "Web Client"
             )
             db.add(violation)
 
@@ -1409,6 +1478,7 @@ def comment_post(post_id: int, data: CreateCommentSchema, background_tasks: Back
                 comment=data.content,
                 toxicity_score=toxicity_score,
                 level=threat_level,
+                device_info=data.device_info or "Web Client"
             )
             db.add(violation)
 

@@ -1,0 +1,665 @@
+/* ==========================================================================
+   CYBER SENTINEL AI AGENT - ULTRA MODERN HUD STYLES
+   ========================================================================== */
+
+:root {
+    --agent-primary: #38bdf8;
+    --agent-primary-glow: rgba(56, 189, 248, 0.4);
+    --agent-accent: #818cf8;
+    --agent-bg: rgba(10, 15, 29, 0.88);
+    --agent-card-bg: rgba(17, 24, 39, 0.75);
+    --agent-border: rgba(56, 189, 248, 0.2);
+    --agent-text: #f8fafc;
+    --agent-muted: #94a3b8;
+    --agent-success: #10b981;
+    --agent-warning: #f59e0b;
+    --agent-danger: #ef4444;
+    --agent-danger-glow: rgba(239, 68, 68, 0.5);
+    --agent-radius: 20px;
+    --agent-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --- Floating Agent Orb / Trigger --- */
+.cyber-agent-orb {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9990;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+    transition: var(--agent-transition);
+}
+
+.cyber-agent-orb:hover {
+    transform: translateY(-3px) scale(1.02);
+}
+
+.cyber-agent-avatar {
+    position: relative;
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+    border: 2px solid var(--agent-primary);
+    box-shadow: 0 0 20px var(--agent-primary-glow), inset 0 0 15px rgba(56, 189, 248, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    transition: var(--agent-transition);
+    overflow: hidden;
+}
+
+.cyber-agent-avatar-icon {
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.8));
+    animation: agentHover 3s ease-in-out infinite;
+}
+
+/* Pulsing radar rings */
+.cyber-agent-avatar::before {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 1.5px dashed var(--agent-primary);
+    animation: agentRotate 12s linear infinite;
+    opacity: 0.6;
+}
+
+.cyber-agent-avatar::after {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, transparent 70%);
+    animation: agentPulse 2.4s ease-in-out infinite;
+}
+
+/* Floating Status Pill */
+.cyber-agent-pill {
+    background: var(--agent-bg);
+    border: 1px solid var(--agent-border);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 8px 14px;
+    border-radius: 999px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-width: 220px;
+    transition: var(--agent-transition);
+}
+
+.cyber-agent-pill-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--agent-primary);
+}
+
+.cyber-agent-pill-indicator {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--agent-success);
+    box-shadow: 0 0 8px var(--agent-success);
+    animation: agentBlink 1.8s infinite;
+}
+
+.cyber-agent-pill-device {
+    font-size: 11.5px;
+    color: var(--agent-text);
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* --- STATE: RISK ALERT (CRITICAL VIOLATION / BAD COMMENT) --- */
+.cyber-agent-orb.agent-risk-alert .cyber-agent-avatar {
+    border-color: var(--agent-danger);
+    box-shadow: 0 0 35px var(--agent-danger-glow), inset 0 0 20px rgba(239, 68, 68, 0.4);
+    animation: agentAlarmPulse 0.6s infinite alternate;
+}
+
+.cyber-agent-orb.agent-risk-alert .cyber-agent-avatar::before {
+    border-color: var(--agent-danger);
+    animation-duration: 3s;
+}
+
+.cyber-agent-orb.agent-risk-alert .cyber-agent-pill {
+    border-color: var(--agent-danger);
+    background: rgba(40, 10, 15, 0.92);
+    box-shadow: 0 0 25px rgba(239, 68, 68, 0.4);
+}
+
+.cyber-agent-orb.agent-risk-alert .cyber-agent-pill-header {
+    color: var(--agent-danger);
+}
+
+.cyber-agent-orb.agent-risk-alert .cyber-agent-pill-indicator {
+    background: var(--agent-danger);
+    box-shadow: 0 0 12px var(--agent-danger);
+}
+
+/* --- STATE: SCANNING MATRIX --- */
+.cyber-agent-orb.agent-scanning .cyber-agent-avatar {
+    border-color: var(--agent-warning);
+    box-shadow: 0 0 25px rgba(245, 158, 11, 0.4);
+}
+
+.cyber-agent-orb.agent-scanning .cyber-agent-pill-header {
+    color: var(--agent-warning);
+}
+
+.cyber-agent-orb.agent-scanning .cyber-agent-pill-indicator {
+    background: var(--agent-warning);
+    box-shadow: 0 0 10px var(--agent-warning);
+}
+
+/* --- Interactive Speech Bubble --- */
+.cyber-agent-speech-bubble {
+    position: fixed;
+    bottom: 96px;
+    right: 24px;
+    max-width: 340px;
+    background: var(--agent-bg);
+    border: 1px solid var(--agent-border);
+    border-radius: 16px;
+    padding: 14px 18px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 25px var(--agent-primary-glow);
+    z-index: 9992;
+    transform: translateY(15px) scale(0.95);
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--agent-transition);
+}
+
+.cyber-agent-speech-bubble.active {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.cyber-agent-speech-bubble.risk-alert {
+    border-color: var(--agent-danger);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px var(--agent-danger-glow);
+    background: rgba(30, 8, 14, 0.95);
+}
+
+.cyber-agent-speech-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--agent-primary);
+    margin-bottom: 6px;
+}
+
+.cyber-agent-speech-bubble.risk-alert .cyber-agent-speech-title {
+    color: var(--agent-danger);
+}
+
+.cyber-agent-speech-text {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--agent-text);
+    font-weight: 500;
+}
+
+.cyber-agent-speech-waveform {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    height: 14px;
+    margin-top: 8px;
+}
+
+.cyber-agent-speech-waveform span {
+    display: block;
+    width: 3px;
+    height: 4px;
+    background: var(--agent-primary);
+    border-radius: 2px;
+    animation: waveBar 1.2s infinite ease-in-out;
+}
+
+.cyber-agent-speech-waveform span:nth-child(2) { animation-delay: 0.15s; }
+.cyber-agent-speech-waveform span:nth-child(3) { animation-delay: 0.3s; }
+.cyber-agent-speech-waveform span:nth-child(4) { animation-delay: 0.45s; }
+.cyber-agent-speech-waveform span:nth-child(5) { animation-delay: 0.6s; }
+
+.cyber-agent-speech-bubble.risk-alert .cyber-agent-speech-waveform span {
+    background: var(--agent-danger);
+}
+
+/* --- FULL AGENT CYBER CONSOLE / MODAL --- */
+.cyber-agent-modal {
+    position: fixed;
+    bottom: 96px;
+    right: 24px;
+    width: 440px;
+    max-width: calc(100vw - 32px);
+    max-height: 600px;
+    background: var(--agent-bg);
+    border: 1px solid var(--agent-border);
+    border-radius: var(--agent-radius);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 35px var(--agent-primary-glow);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    z-index: 9995;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: translateY(20px) scale(0.96);
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--agent-transition);
+}
+
+.cyber-agent-modal.open {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.cyber-agent-modal.risk-mode {
+    border-color: var(--agent-danger);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px var(--agent-danger-glow);
+}
+
+/* Console Header */
+.cyber-agent-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--agent-border);
+    background: rgba(15, 23, 42, 0.6);
+}
+
+.cyber-agent-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cyber-agent-header-icon {
+    font-size: 20px;
+    filter: drop-shadow(0 0 8px var(--agent-primary-glow));
+}
+
+.cyber-agent-header-title {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--agent-text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cyber-agent-header-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(56, 189, 248, 0.15);
+    border: 1px solid var(--agent-primary);
+    color: var(--agent-primary);
+}
+
+.cyber-agent-close-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--agent-muted);
+    border-radius: 8px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    transition: var(--agent-transition);
+}
+
+.cyber-agent-close-btn:hover {
+    color: #fff;
+    background: rgba(239, 68, 68, 0.25);
+    border-color: var(--agent-danger);
+}
+
+/* Navigation Tabs inside Agent Console */
+.cyber-agent-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--agent-border);
+    background: rgba(10, 15, 29, 0.5);
+    padding: 0 12px;
+}
+
+.cyber-agent-tab-btn {
+    flex: 1;
+    padding: 10px 8px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--agent-muted);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: var(--agent-transition);
+}
+
+.cyber-agent-tab-btn:hover {
+    color: var(--agent-text);
+}
+
+.cyber-agent-tab-btn.active {
+    color: var(--agent-primary);
+    border-bottom-color: var(--agent-primary);
+}
+
+/* Console Body */
+.cyber-agent-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* Tab Panels */
+.cyber-agent-tab-panel {
+    display: none;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.cyber-agent-tab-panel.active {
+    display: flex;
+}
+
+/* Telemetry Card */
+.cyber-telemetry-card {
+    background: var(--agent-card-bg);
+    border: 1px solid var(--agent-border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+}
+
+.cyber-telemetry-title {
+    font-size: 11.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--agent-primary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.cyber-telemetry-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.cyber-telemetry-item {
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 10px;
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cyber-telemetry-label {
+    font-size: 10px;
+    color: var(--agent-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.cyber-telemetry-val {
+    font-size: 12.5px;
+    color: var(--agent-text);
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Action Buttons inside Agent */
+.cyber-agent-btn-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.cyber-agent-btn {
+    flex: 1;
+    padding: 9px 12px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: var(--agent-transition);
+    border: 1px solid transparent;
+}
+
+.cyber-agent-btn-primary {
+    background: linear-gradient(135deg, #0284c7 0%, #4f46e5 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(2, 132, 199, 0.3);
+}
+
+.cyber-agent-btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(2, 132, 199, 0.45);
+}
+
+.cyber-agent-btn-danger {
+    background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+}
+
+.cyber-agent-btn-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--agent-text);
+}
+
+.cyber-agent-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Threat Log List */
+.cyber-threat-logs {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 240px;
+    overflow-y: auto;
+}
+
+.cyber-threat-item {
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.cyber-threat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+}
+
+.cyber-threat-badge {
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: var(--agent-danger);
+    color: white;
+    font-weight: 800;
+}
+
+.cyber-threat-time {
+    color: var(--agent-muted);
+    font-size: 10.5px;
+}
+
+.cyber-threat-comment {
+    font-size: 12px;
+    color: #fca5a5;
+    font-style: italic;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+.cyber-threat-device {
+    font-size: 10.5px;
+    color: var(--agent-muted);
+}
+
+/* Voice Settings Controls */
+.cyber-voice-setting-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.cyber-voice-setting-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--agent-text);
+}
+
+.cyber-toggle-switch {
+    position: relative;
+    width: 44px;
+    height: 24px;
+}
+
+.cyber-toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.cyber-toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background-color: #334155;
+    border-radius: 24px;
+    transition: 0.3s;
+}
+
+.cyber-toggle-slider::before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.cyber-toggle-switch input:checked + .cyber-toggle-slider {
+    background-color: var(--agent-primary);
+}
+
+.cyber-toggle-switch input:checked + .cyber-toggle-slider::before {
+    transform: translateX(20px);
+}
+
+/* --- KEYFRAME ANIMATIONS --- */
+@keyframes agentRotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes agentHover {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
+@keyframes agentPulse {
+    0%, 100% { opacity: 0.4; transform: scale(0.92); }
+    50% { opacity: 0.9; transform: scale(1.08); }
+}
+
+@keyframes agentBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+@keyframes agentAlarmPulse {
+    0% { transform: scale(1); filter: brightness(1); }
+    100% { transform: scale(1.08); filter: brightness(1.3); }
+}
+
+@keyframes waveBar {
+    0%, 100% { height: 3px; }
+    50% { height: 12px; }
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .cyber-agent-orb {
+        bottom: 16px;
+        right: 16px;
+    }
+    .cyber-agent-pill {
+        display: none;
+    }
+    .cyber-agent-modal {
+        width: calc(100vw - 32px);
+        bottom: 84px;
+        right: 16px;
+    }
+    .cyber-agent-speech-bubble {
+        right: 16px;
+        left: 16px;
+        max-width: none;
+    }
+}

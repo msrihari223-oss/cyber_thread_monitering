@@ -14,6 +14,7 @@ class LoginSchema(BaseModel):
 class CommentSchema(BaseModel):
     user_id: int
     comment: str
+    device_info: Optional[str] = None
 
 class ForgotPasswordSchema(BaseModel):
     email: str
@@ -83,6 +84,7 @@ class CreatePostSchema(BaseModel):
     content: Optional[str] = None
     image_url: Optional[str] = None
     video_url: Optional[str] = None
+    device_info: Optional[str] = None
 
 
 class PostSchema(BaseModel):
@@ -103,6 +105,7 @@ class CreateCommentSchema(BaseModel):
     post_id: int
     user_id: int
     content: str
+    device_info: Optional[str] = None
 
 
 class CommentResponseSchema(BaseModel):

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feed - Cyber Threat Monitoring</title>
+    <link rel="stylesheet" href="/static/cyber_agent.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
@@ -917,9 +918,11 @@
             elements.postButton.textContent = 'Posting...';
 
             try {
+                const device_info = window.cyberAgentInstance ? window.cyberAgentInstance.deviceInfo.deviceTitle : "Web Client";
                 const body = {
                     user_id: state.userId,
                     content: content || '',
+                    device_info: device_info
                 };
                 if (pendingImageUrl) body.image_url = pendingImageUrl;
                 if (pendingVideoUrl) body.video_url = pendingVideoUrl;
@@ -932,15 +935,42 @@
 
                 if (!response.ok) {
                     const error = await response.json();
+                    if (response.status === 403 && window.cyberAgentInstance) {
+                        window.cyberAgentInstance.reactToThreat({
+                            score: 1.0,
+                            level: 'CRITICAL',
+                            comment: content,
+                            warningsCount: 3,
+                            isBlocked: true
+                        });
+                    }
                     throw new Error(error.detail || 'Failed to create post');
                 }
 
                 const result = await response.json();
 
-                // Warning feedback
+                // Warning feedback & Agent Voice Reaction
                 if (result.is_blocked) {
+                    if (window.cyberAgentInstance) {
+                        window.cyberAgentInstance.reactToThreat({
+                            score: result.toxicity_score || 0.95,
+                            level: 'CRITICAL',
+                            comment: content,
+                            warningsCount: result.warnings_count || 3,
+                            isBlocked: true
+                        });
+                    }
                     showError('⛔ Your account has been blocked due to repeated violations.');
                 } else if (result.warning_issued) {
+                    if (window.cyberAgentInstance) {
+                        window.cyberAgentInstance.reactToThreat({
+                            score: result.toxicity_score || 0.95,
+                            level: 'HIGH',
+                            comment: content,
+                            warningsCount: result.warnings_count || 1,
+                            isBlocked: false
+                        });
+                    }
                     showError(`⚠️ Warning ${result.warnings_count}/3: Your post contained policy-violating content.`);
                 } else {
                     showSuccess('Post shared successfully! 🎉');
@@ -1070,17 +1100,46 @@
             }
 
             try {
+                const device_info = window.cyberAgentInstance ? window.cyberAgentInstance.deviceInfo.deviceTitle : "Web Client";
                 const response = await fetch(`/api/posts/${postId}/comment`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         post_id: postId,
                         user_id: state.userId,
-                        content: content
+                        content: content,
+                        device_info: device_info
                     })
                 });
 
-                if (!response.ok) throw new Error('Failed to post comment');
+                if (!response.ok) {
+                    const err = await response.json().catch(() => ({}));
+                    if (response.status === 403 && window.cyberAgentInstance) {
+                        window.cyberAgentInstance.reactToThreat({
+                            score: 1.0,
+                            level: 'CRITICAL',
+                            comment: content,
+                            warningsCount: 3,
+                            isBlocked: true
+                        });
+                    }
+                    throw new Error(err.detail || 'Failed to post comment');
+                }
+
+                const data = await response.json();
+
+                if (data.warning_issued) {
+                    if (window.cyberAgentInstance) {
+                        window.cyberAgentInstance.reactToThreat({
+                            score: data.toxicity_score || 0.95,
+                            level: data.threat_level || (data.is_blocked ? 'CRITICAL' : 'HIGH'),
+                            comment: content,
+                            warningsCount: data.warnings_count || 1,
+                            isBlocked: data.is_blocked || false
+                        });
+                    }
+                    showError(data.is_blocked ? '⛔ Your account has been permanently blocked.' : `⚠️ Warning ${data.warnings_count}/3: Inappropriate language detected.`);
+                }
 
                 input.value = '';
                 loadComments(postId);
@@ -1212,5 +1271,6 @@
         // Start
         init();
     </script>
+    <script src="/static/cyber_agent.js"></script>
 </body>
 </html>

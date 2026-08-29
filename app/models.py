@@ -28,6 +28,8 @@ class Violation(Base):
     comment = Column(String)
     toxicity_score = Column(Float)
     level = Column(String)
+    device_info = Column(String, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
 
 
 class VideoCall(Base):
